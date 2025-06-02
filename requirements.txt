@@ -11,3 +11,4 @@ bidict==0.23.1
 gunicorn
 openai
 werkzeug==2.0.3
+flask-cors
