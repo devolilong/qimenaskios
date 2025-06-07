@@ -230,6 +230,141 @@
             margin-top: 4px;
             font-style: italic;
         }
+<<<<<<< HEAD
+=======
+        /* 进度条弹出框样式 */
+        .progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .progress-overlay.show {
+            opacity: 1;
+        }
+        .progress-container {
+            background: #fff;
+            border: 1.5px solid #222;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .progress-overlay.show .progress-container {
+            transform: translateY(0);
+        }
+        .progress-title {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: #222;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #222;
+            border-radius: 4px;
+            transition: width 0.5s ease-in-out;
+        }
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            position: relative;
+            padding: 0 10px;
+        }
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            font-size: 0.9rem;
+            color: #666;
+            transition: all 0.3s;
+            padding: 0 5px;
+        }
+        .progress-step.active {
+            color: #222;
+            font-weight: 500;
+            transform: scale(1.05);
+        }
+        .progress-step.completed {
+            color: #222;
+        }
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 12px;
+            background: #f0f0f0;
+            border: 2px solid #222;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .progress-step.active::before {
+            background: #222;
+            transform: translateX(-50%) scale(1.2);
+        }
+        .progress-step.completed::before {
+            background: #222;
+        }
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: -19px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #f0f0f0;
+            z-index: -1;
+            transition: background 0.3s;
+        }
+        .progress-step:last-child::after {
+            display: none;
+        }
+        .progress-step.completed::after {
+            background: #222;
+        }
+        .progress-status {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #444;
+            margin-top: 20px;
+            min-height: 24px;
+            font-weight: 500;
+        }
+        .time-hint {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+        }
+>>>>>>> 4cd67fa (first commit)
     </style>
 </head>
 <body>
@@ -302,7 +437,29 @@
                 </div>
 
                 <button type="submit" class="main-btn" id="submitBtn" data-i18n="submit_button">解盤</button>
+<<<<<<< HEAD
             </form>
+=======
+                <div class="time-hint" data-i18n="time_hint">解盤時間約需1分鐘，請耐心等待</div>
+            </form>
+
+            <!-- 进度条弹出框 -->
+            <div class="progress-overlay" id="progressOverlay">
+                <div class="progress-container">
+                    <div class="progress-title" data-i18n="progress_title">奇門解盤進行中</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-steps">
+                        <div class="progress-step" data-step="0" data-i18n="step_1">建立奇門局</div>
+                        <div class="progress-step" data-step="1" data-i18n="step_2">分析天地人盤</div>
+                        <div class="progress-step" data-step="2" data-i18n="step_3">提取八門八神</div>
+                        <div class="progress-step" data-step="3" data-i18n="step_4">洞察未來玄機</div>
+                    </div>
+                    <div class="progress-status" id="progressStatus"></div>
+                </div>
+            </div>
+>>>>>>> 4cd67fa (first commit)
         </div>
 
         <!-- 页面二：解读展示 -->
@@ -364,7 +521,11 @@
                 'question_placeholder': '請輸入您想要諮詢的問題...',
                 'please_select': '請選擇',
                 'submit_button': '解盤',
+<<<<<<< HEAD
                 'card_interpretation': '解盤結果',
+=======
+                'card_interpretation': '排盤解讀',
+>>>>>>> 4cd67fa (first commit)
                 'card_pan': '排盤圖',
                 'hour_zi': '子時（23:00 ~ 00:59）',
                 'hour_chou': '丑時（01:00 ~ 02:59）',
@@ -377,7 +538,22 @@
                 'hour_shen': '申時（15:00 ~ 16:59）',
                 'hour_you': '酉時（17:00 ~ 18:59）',
                 'hour_xu': '戌時（19:00 ~ 20:59）',
+<<<<<<< HEAD
                 'hour_hai': '亥時（21:00 ~ 22:59）'
+=======
+                'hour_hai': '亥時（21:00 ~ 22:59）',
+                'time_hint': '解盤時間約需1分鐘，請耐心等待',
+                'step_1': '建立奇門局',
+                'step_2': '分析天地人盤',
+                'step_3': '提取八門八神',
+                'step_4': '洞察未來玄機',
+                'status_1': '正在建立奇門局...',
+                'status_2': '分析天盤、地盤與人盤...',
+                'status_3': '提取八門八神...',
+                'status_4': '洞察未來玄機...',
+                'complete': '解盤完成！',
+                'progress_title': '奇門解盤進行中'
+>>>>>>> 4cd67fa (first commit)
             },
             'en': {
                 'page_title': 'Qi Men Divination',
@@ -407,7 +583,22 @@
                 'hour_shen': 'Shen Hour (15:00 ~ 16:59)',
                 'hour_you': 'You Hour (17:00 ~ 18:59)',
                 'hour_xu': 'Xu Hour (19:00 ~ 20:59)',
+<<<<<<< HEAD
                 'hour_hai': 'Hai Hour (21:00 ~ 22:59)'
+=======
+                'hour_hai': 'Hai Hour (21:00 ~ 22:59)',
+                'time_hint': 'Divination process takes about 1 minute, please be patient',
+                'step_1': 'Establish Qi Men',
+                'step_2': 'Analyze Charts',
+                'step_3': 'Extract Elements',
+                'step_4': 'Divine Future',
+                'status_1': 'Establishing Qi Men chart...',
+                'status_2': 'Analyzing Heaven, Earth & Human charts...',
+                'status_3': 'Extracting Eight Gates & Deities...',
+                'status_4': 'Divining future insights...',
+                'complete': 'Divination Complete!',
+                'progress_title': 'Qi Men Divination in Progress'
+>>>>>>> 4cd67fa (first commit)
             },
             'zh-CN': {
                 'page_title': '奇门解盘',
@@ -437,7 +628,22 @@
                 'hour_shen': '申时（15:00 ~ 16:59）',
                 'hour_you': '酉时（17:00 ~ 18:59）',
                 'hour_xu': '戌时（19:00 ~ 20:59）',
+<<<<<<< HEAD
                 'hour_hai': '亥时（21:00 ~ 22:59）'
+=======
+                'hour_hai': '亥时（21:00 ~ 22:59）',
+                'time_hint': '解盘时间约需1分钟，请耐心等待',
+                'step_1': '建立奇门局',
+                'step_2': '分析天地人盘',
+                'step_3': '提取八门八神',
+                'step_4': '洞察未来玄机',
+                'status_1': '正在建立奇门局...',
+                'status_2': '分析天盘、地盘与人盘...',
+                'status_3': '提取八门八神...',
+                'status_4': '洞察未来玄机...',
+                'complete': '解盘完成！',
+                'progress_title': '奇门解盘进行中'
+>>>>>>> 4cd67fa (first commit)
             }
         };
 
@@ -513,6 +719,100 @@
             const resultContainer = document.getElementById('resultContainer');
             const backBtn = document.getElementById('backBtn');
 
+<<<<<<< HEAD
+=======
+            // 进度条相关变量
+            const progressOverlay = document.getElementById('progressOverlay');
+            const progressFill = document.getElementById('progressFill');
+            const progressSteps = document.querySelectorAll('.progress-step');
+            const progressStatus = document.getElementById('progressStatus');
+
+            function updateProgressSmooth() {
+                const totalDuration = 53000; // 总时长53秒
+                const startTime = Date.now();
+                const steps = [
+                    { percent: 20, duration: 13000, status: 0 },
+                    { percent: 50, duration: 15000, status: 1 },
+                    { percent: 80, duration: 15000, status: 2 },
+                    { percent: 100, duration: 10000, status: 3 }
+                ];
+                
+                function animate() {
+                    const currentTime = Date.now();
+                    const elapsed = currentTime - startTime;
+                    
+                    if (elapsed >= totalDuration) {
+                        // 完成所有进度
+                        progressFill.style.width = '100%';
+                        progressSteps.forEach((step, index) => {
+                            step.classList.add('completed');
+                            step.classList.remove('active');
+                        });
+                        progressStatus.textContent = i18n[currentLang]['complete'];
+                        return;
+                    }
+                    
+                    // 计算当前应该处于哪个阶段
+                    let currentProgress = 0;
+                    let currentStatus = 0;
+                    let accumulatedTime = 0;
+                    
+                    for (let i = 0; i < steps.length; i++) {
+                        if (elapsed < accumulatedTime + steps[i].duration) {
+                            // 在当前阶段内
+                            const stepProgress = (elapsed - accumulatedTime) / steps[i].duration;
+                            const stepStartPercent = i === 0 ? 0 : steps[i-1].percent;
+                            const stepEndPercent = steps[i].percent;
+                            currentProgress = stepStartPercent + (stepEndPercent - stepStartPercent) * stepProgress;
+                            currentStatus = steps[i].status;
+                            break;
+                        }
+                        accumulatedTime += steps[i].duration;
+                    }
+                    
+                    // 更新进度条
+                    progressFill.style.width = `${currentProgress}%`;
+                    
+                    // 更新步骤状态
+                    progressSteps.forEach((step, index) => {
+                        if (index < currentStatus) {
+                            step.classList.add('completed');
+                            step.classList.remove('active');
+                        } else if (index === currentStatus) {
+                            step.classList.add('active');
+                            step.classList.remove('completed');
+                        } else {
+                            step.classList.remove('active', 'completed');
+                        }
+                    });
+                    
+                    // 更新状态文本
+                    const statusKey = `status_${currentStatus + 1}`;
+                    progressStatus.textContent = i18n[currentLang][statusKey];
+                    
+                    // 继续动画
+                    requestAnimationFrame(animate);
+                }
+                
+                // 开始动画
+                requestAnimationFrame(animate);
+            }
+
+            function showProgress() {
+                progressOverlay.style.display = 'flex';
+                // 触发重排以启动动画
+                progressOverlay.offsetHeight;
+                progressOverlay.classList.add('show');
+            }
+
+            function hideProgress() {
+                progressOverlay.classList.remove('show');
+                setTimeout(() => {
+                    progressOverlay.style.display = 'none';
+                }, 300); // 等待动画完成
+            }
+
+>>>>>>> 4cd67fa (first commit)
             infoForm.onsubmit = async function(e) {
                 e.preventDefault();
                 if (!infoForm.checkValidity()) {
@@ -522,6 +822,15 @@
 
                 submitBtn.disabled = true;
                 submitBtn.textContent = currentLang === 'en' ? 'Processing...' : '处理中...';
+<<<<<<< HEAD
+=======
+                
+                // 显示进度条弹出框
+                showProgress();
+                
+                // 开始进度条动画
+                updateProgressSmooth();
+>>>>>>> 4cd67fa (first commit)
 
                 try {
                     const formData = new FormData(infoForm);
@@ -591,6 +900,10 @@
                     alert(currentLang === 'en' ? 
                         'Error: ' + error.message : 
                         '错误：' + error.message);
+<<<<<<< HEAD
+=======
+                    hideProgress();
+>>>>>>> 4cd67fa (first commit)
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = i18n[currentLang]['submit_button'];
