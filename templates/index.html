@@ -230,8 +230,6 @@
             margin-top: 4px;
             font-style: italic;
         }
-<<<<<<< HEAD
-=======
         /* 进度条弹出框样式 */
         .progress-overlay {
             position: fixed;
@@ -364,7 +362,6 @@
             margin-top: 8px;
             font-style: italic;
         }
->>>>>>> 4cd67fa (first commit)
     </style>
 </head>
 <body>
@@ -437,9 +434,6 @@
                 </div>
 
                 <button type="submit" class="main-btn" id="submitBtn" data-i18n="submit_button">解盤</button>
-<<<<<<< HEAD
-            </form>
-=======
                 <div class="time-hint" data-i18n="time_hint">解盤時間約需1分鐘，請耐心等待</div>
             </form>
 
@@ -459,7 +453,6 @@
                     <div class="progress-status" id="progressStatus"></div>
                 </div>
             </div>
->>>>>>> 4cd67fa (first commit)
         </div>
 
         <!-- 页面二：解读展示 -->
@@ -521,11 +514,7 @@
                 'question_placeholder': '請輸入您想要諮詢的問題...',
                 'please_select': '請選擇',
                 'submit_button': '解盤',
-<<<<<<< HEAD
-                'card_interpretation': '解盤結果',
-=======
                 'card_interpretation': '排盤解讀',
->>>>>>> 4cd67fa (first commit)
                 'card_pan': '排盤圖',
                 'hour_zi': '子時（23:00 ~ 00:59）',
                 'hour_chou': '丑時（01:00 ~ 02:59）',
@@ -538,9 +527,6 @@
                 'hour_shen': '申時（15:00 ~ 16:59）',
                 'hour_you': '酉時（17:00 ~ 18:59）',
                 'hour_xu': '戌時（19:00 ~ 20:59）',
-<<<<<<< HEAD
-                'hour_hai': '亥時（21:00 ~ 22:59）'
-=======
                 'hour_hai': '亥時（21:00 ~ 22:59）',
                 'time_hint': '解盤時間約需1分鐘，請耐心等待',
                 'step_1': '建立奇門局',
@@ -553,7 +539,6 @@
                 'status_4': '洞察未來玄機...',
                 'complete': '解盤完成！',
                 'progress_title': '奇門解盤進行中'
->>>>>>> 4cd67fa (first commit)
             },
             'en': {
                 'page_title': 'Qi Men Divination',
@@ -583,9 +568,6 @@
                 'hour_shen': 'Shen Hour (15:00 ~ 16:59)',
                 'hour_you': 'You Hour (17:00 ~ 18:59)',
                 'hour_xu': 'Xu Hour (19:00 ~ 20:59)',
-<<<<<<< HEAD
-                'hour_hai': 'Hai Hour (21:00 ~ 22:59)'
-=======
                 'hour_hai': 'Hai Hour (21:00 ~ 22:59)',
                 'time_hint': 'Divination process takes about 1 minute, please be patient',
                 'step_1': 'Establish Qi Men',
@@ -598,7 +580,6 @@
                 'status_4': 'Divining future insights...',
                 'complete': 'Divination Complete!',
                 'progress_title': 'Qi Men Divination in Progress'
->>>>>>> 4cd67fa (first commit)
             },
             'zh-CN': {
                 'page_title': '奇门解盘',
@@ -628,9 +609,6 @@
                 'hour_shen': '申时（15:00 ~ 16:59）',
                 'hour_you': '酉时（17:00 ~ 18:59）',
                 'hour_xu': '戌时（19:00 ~ 20:59）',
-<<<<<<< HEAD
-                'hour_hai': '亥时（21:00 ~ 22:59）'
-=======
                 'hour_hai': '亥时（21:00 ~ 22:59）',
                 'time_hint': '解盘时间约需1分钟，请耐心等待',
                 'step_1': '建立奇门局',
@@ -643,7 +621,6 @@
                 'status_4': '洞察未来玄机...',
                 'complete': '解盘完成！',
                 'progress_title': '奇门解盘进行中'
->>>>>>> 4cd67fa (first commit)
             }
         };
 
@@ -719,8 +696,6 @@
             const resultContainer = document.getElementById('resultContainer');
             const backBtn = document.getElementById('backBtn');
 
-<<<<<<< HEAD
-=======
             // 进度条相关变量
             const progressOverlay = document.getElementById('progressOverlay');
             const progressFill = document.getElementById('progressFill');
@@ -812,7 +787,6 @@
                 }, 300); // 等待动画完成
             }
 
->>>>>>> 4cd67fa (first commit)
             infoForm.onsubmit = async function(e) {
                 e.preventDefault();
                 if (!infoForm.checkValidity()) {
@@ -822,15 +796,12 @@
 
                 submitBtn.disabled = true;
                 submitBtn.textContent = currentLang === 'en' ? 'Processing...' : '处理中...';
-<<<<<<< HEAD
-=======
                 
                 // 显示进度条弹出框
                 showProgress();
                 
                 // 开始进度条动画
                 updateProgressSmooth();
->>>>>>> 4cd67fa (first commit)
 
                 try {
                     const formData = new FormData(infoForm);
@@ -900,10 +871,7 @@
                     alert(currentLang === 'en' ? 
                         'Error: ' + error.message : 
                         '错误：' + error.message);
-<<<<<<< HEAD
-=======
                     hideProgress();
->>>>>>> 4cd67fa (first commit)
                 } finally {
                     submitBtn.disabled = false;
                     submitBtn.textContent = i18n[currentLang]['submit_button'];
