@@ -58,12 +58,12 @@
             font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
         }
         .input-box:focus, .form-select:focus {
-            border-color: #444;
+            border: 1.5px solid #555;
         }
         .main-btn {
             display: block;
             width: 100%;
-            background: #222;
+            background: #111;
             color: #fff;
             font-size: 1.3rem;
             font-weight: bold;
@@ -78,8 +78,14 @@
         }
         .main-btn:hover {
             background: #fff;
-            color: #222;
-            border: 1.5px solid #222;
+            color: #111;
+            border: 1.5px solid #111;
+        }
+        .main-btn:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            border: none;
         }
         .centered {
             display: flex;
@@ -90,13 +96,24 @@
         .result-container {
             margin-top: 20px;
             padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 1.5px solid #222;
+            border-radius: 12px;
+            background: #fff;
+        }
+        .interpretation-content {
+            font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+        }
+        .ai-interpretation {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            color: #444;
         }
         .card {
             margin-bottom: 20px;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
+            border: 1.5px solid #222;
+            border-radius: 12px;
+            background: #fff;
         }
         .card-header {
             background: #fff;
@@ -238,12 +255,19 @@
             padding: 30px;
             width: 90%;
             max-width: 500px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .progress-overlay.show .progress-container {
+            transform: translateY(0);
         }
         .progress-title {
             text-align: center;
             font-size: 1.4rem;
-            font-weight: bold;
-            margin-bottom: 20px;
+            font-weight: 500;
+            margin-bottom: 25px;
             color: #222;
         }
         .progress-bar {
@@ -265,34 +289,43 @@
         .progress-steps {
             display: flex;
             justify-content: space-between;
-            margin-top: 15px;
+            margin-top: 25px;
             position: relative;
+            padding: 0 10px;
         }
         .progress-step {
-            position: relative;
             text-align: center;
             flex: 1;
+            position: relative;
             font-size: 0.9rem;
             color: #666;
-            padding-top: 25px;
+            transition: all 0.3s;
+            padding: 0 5px;
+        }
+        .progress-step.active {
+            color: #222;
+            font-weight: 500;
+            transform: scale(1.05);
+        }
+        .progress-step.completed {
+            color: #222;
         }
         .progress-step::before {
             content: '';
             position: absolute;
-            top: -19px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
             width: 12px;
             height: 12px;
             background: #f0f0f0;
-            border: 2px solid #ddd;
+            border: 2px solid #222;
             border-radius: 50%;
-            z-index: 1;
-            transition: background 0.3s, border-color 0.3s;
+            transition: all 0.3s;
         }
         .progress-step.active::before {
-            background: #fff;
-            border-color: #222;
+            background: #222;
+            transform: translateX(-50%) scale(1.2);
         }
         .progress-step.completed::before {
             background: #222;
@@ -505,9 +538,7 @@
                 'status_3': '提取八門八神...',
                 'status_4': '洞察未來玄機...',
                 'complete': '解盤完成！',
-                'progress_title': '奇門解盤進行中',
-                'back': '返回',
-                'card_basic_info': '排盤基本信息'
+                'progress_title': '奇門解盤進行中'
             },
             'en': {
                 'page_title': 'Qi Men Divination',
@@ -548,9 +579,7 @@
                 'status_3': 'Extracting Eight Gates & Deities...',
                 'status_4': 'Divining future insights...',
                 'complete': 'Divination Complete!',
-                'progress_title': 'Qi Men Divination in Progress',
-                'back': 'Back',
-                'card_basic_info': 'Basic Information'
+                'progress_title': 'Qi Men Divination in Progress'
             },
             'zh-CN': {
                 'page_title': '奇门解盘',
@@ -567,7 +596,7 @@
                 'question_placeholder': '请输入您想要咨询的问题...',
                 'please_select': '请选择',
                 'submit_button': '解盘',
-                'card_interpretation': '排盘解读',
+                'card_interpretation': '解盘结果',
                 'card_pan': '排盘图',
                 'hour_zi': '子时（23:00 ~ 00:59）',
                 'hour_chou': '丑时（01:00 ~ 02:59）',
@@ -591,36 +620,35 @@
                 'status_3': '提取八门八神...',
                 'status_4': '洞察未来玄机...',
                 'complete': '解盘完成！',
-                'progress_title': '奇门解盘进行中',
-                'back': '返回',
-                'card_basic_info': '排盘基本信息'
+                'progress_title': '奇门解盘进行中'
             }
         };
 
         document.addEventListener('DOMContentLoaded', function() {
+            // 语言切换功能
             const langBtn = document.getElementById('langBtn');
             const langPop = document.getElementById('langPop');
             const langOptions = document.querySelectorAll('.lang-option');
-            const langInput = document.getElementById('langInput');
-            let currentLang = langInput.value;
-
-            // 初始化语言
-            updateLanguage(currentLang);
+            let currentLang = 'zh-TW';
 
             function updateLanguage(lang) {
                 currentLang = lang;
-                langInput.value = lang;
-                document.title = i18n[lang]['page_title'];
+                document.documentElement.lang = lang;
+                document.getElementById('langInput').value = lang;
                 
-                // 更新所有带有 data-i18n 属性的元素
+                // 更新所有带有data-i18n属性的元素
                 document.querySelectorAll('[data-i18n]').forEach(element => {
                     const key = element.getAttribute('data-i18n');
                     if (i18n[lang][key]) {
-                        element.textContent = i18n[lang][key];
+                        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                            element.placeholder = i18n[lang][key];
+                        } else {
+                            element.textContent = i18n[lang][key];
+                        }
                     }
                 });
 
-                // 更新所有带有 data-i18n-placeholder 属性的元素
+                // 更新所有带有data-i18n-placeholder属性的元素
                 document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
                     const key = element.getAttribute('data-i18n-placeholder');
                     if (i18n[lang][key]) {
@@ -628,10 +656,16 @@
                     }
                 });
 
-                // 更新语言选择按钮状态
+                // 更新语言选项高亮
                 langOptions.forEach(btn => {
                     btn.classList.toggle('selected', btn.getAttribute('data-lang') === lang);
                 });
+
+                // 更新提示文本
+                const methodHint = document.getElementById('methodHint');
+                const typeHint = document.getElementById('typeHint');
+                if (methodHint) methodHint.textContent = i18n[lang]['hint_method'] || '';
+                if (typeHint) typeHint.textContent = i18n[lang]['hint_type'] || '';
             }
 
             // 语言切换按钮点击事件
@@ -656,175 +690,236 @@
             };
 
             // 表单提交处理
-            const form = document.getElementById('infoForm');
+            const infoForm = document.getElementById('infoForm');
             const submitBtn = document.getElementById('submitBtn');
+            const pageInput = document.getElementById('page-input');
+            const resultContainer = document.getElementById('resultContainer');
+            const backBtn = document.getElementById('backBtn');
+
+            // 进度条相关变量
             const progressOverlay = document.getElementById('progressOverlay');
             const progressFill = document.getElementById('progressFill');
             const progressSteps = document.querySelectorAll('.progress-step');
             const progressStatus = document.getElementById('progressStatus');
-            const resultContainer = document.getElementById('resultContainer');
-            const pageInput = document.getElementById('page-input');
-            const backBtn = document.getElementById('backBtn');
-            const questionDisplay = document.getElementById('questionDisplay');
-            const aiInterpretation = document.getElementById('aiInterpretation');
-            const basicInfoContent = document.getElementById('basicInfoContent');
 
-            form.onsubmit = async function(e) {
-                e.preventDefault();
+            function updateProgressSmooth() {
+                const totalDuration = 53000; // 总时长53秒
+                const startTime = Date.now();
+                const steps = [
+                    { percent: 20, duration: 13000, status: 0 },
+                    { percent: 50, duration: 15000, status: 1 },
+                    { percent: 80, duration: 15000, status: 2 },
+                    { percent: 100, duration: 10000, status: 3 }
+                ];
                 
-                // 禁用提交按钮
-                submitBtn.disabled = true;
-                submitBtn.textContent = i18n[currentLang]['submit_button'] + '...';
-                
-                // 显示进度条
-                progressOverlay.style.display = 'flex';
-                setTimeout(() => progressOverlay.classList.add('show'), 10);
-                
-                // 获取表单数据
-                const formData = new FormData(form);
-                const data = Object.fromEntries(formData.entries());
-                
-                try {
-                    // 开始进度条动画
-                    const startTime = Date.now();
-                    const totalDuration = 60000; // 60秒
-                    const steps = [
-                        { duration: 15000, percent: 25, status: 0 },
-                        { duration: 15000, percent: 50, status: 1 },
-                        { duration: 15000, percent: 75, status: 2 },
-                        { duration: 15000, percent: 100, status: 3 }
-                    ];
+                function animate() {
+                    const currentTime = Date.now();
+                    const elapsed = currentTime - startTime;
                     
-                    function animate() {
-                        const elapsed = Date.now() - startTime;
-                        if (elapsed >= totalDuration) {
-                            // 动画结束
-                            progressFill.style.width = '100%';
-                            progressSteps.forEach(step => step.classList.add('completed'));
-                            progressStatus.textContent = i18n[currentLang]['complete'];
-                            return;
-                        }
-                        
-                        let currentProgress = 0;
-                        let currentStatus = 0;
-                        let accumulatedTime = 0;
-                        
-                        for (let i = 0; i < steps.length; i++) {
-                            if (elapsed < accumulatedTime + steps[i].duration) {
-                                // 在当前阶段内
-                                const stepProgress = (elapsed - accumulatedTime) / steps[i].duration;
-                                const stepStartPercent = i === 0 ? 0 : steps[i-1].percent;
-                                const stepEndPercent = steps[i].percent;
-                                currentProgress = stepStartPercent + (stepEndPercent - stepStartPercent) * stepProgress;
-                                currentStatus = steps[i].status;
-                                break;
-                            }
-                            accumulatedTime += steps[i].duration;
-                        }
-                        
-                        // 更新进度条
-                        progressFill.style.width = `${currentProgress}%`;
-                        
-                        // 更新步骤状态
+                    if (elapsed >= totalDuration) {
+                        // 完成所有进度
+                        progressFill.style.width = '100%';
                         progressSteps.forEach((step, index) => {
-                            if (index < currentStatus) {
-                                step.classList.add('completed');
-                                step.classList.remove('active');
-                            } else if (index === currentStatus) {
-                                step.classList.add('active');
-                                step.classList.remove('completed');
-                            } else {
-                                step.classList.remove('active', 'completed');
-                            }
+                            step.classList.add('completed');
+                            step.classList.remove('active');
                         });
-                        
-                        // 更新状态文本
-                        const statusKey = `status_${currentStatus + 1}`;
-                        progressStatus.textContent = i18n[currentLang][statusKey];
-                        
-                        // 继续动画
-                        requestAnimationFrame(animate);
+                        progressStatus.textContent = i18n[currentLang]['complete'];
+                        return;
                     }
                     
-                    // 开始动画
-                    animate();
+                    // 计算当前应该处于哪个阶段
+                    let currentProgress = 0;
+                    let currentStatus = 0;
+                    let accumulatedTime = 0;
                     
-                    // 发送请求
-                    const response = await fetch('/api/divine', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(data)
+                    for (let i = 0; i < steps.length; i++) {
+                        if (elapsed < accumulatedTime + steps[i].duration) {
+                            // 在当前阶段内
+                            const stepProgress = (elapsed - accumulatedTime) / steps[i].duration;
+                            const stepStartPercent = i === 0 ? 0 : steps[i-1].percent;
+                            const stepEndPercent = steps[i].percent;
+                            currentProgress = stepStartPercent + (stepEndPercent - stepStartPercent) * stepProgress;
+                            currentStatus = steps[i].status;
+                            break;
+                        }
+                        accumulatedTime += steps[i].duration;
+                    }
+                    
+                    // 更新进度条
+                    progressFill.style.width = `${currentProgress}%`;
+                    
+                    // 更新步骤状态
+                    progressSteps.forEach((step, index) => {
+                        if (index < currentStatus) {
+                            step.classList.add('completed');
+                            step.classList.remove('active');
+                        } else if (index === currentStatus) {
+                            step.classList.add('active');
+                            step.classList.remove('completed');
+                        } else {
+                            step.classList.remove('active', 'completed');
+                        }
                     });
                     
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
+                    // 更新状态文本
+                    const statusKey = `status_${currentStatus + 1}`;
+                    progressStatus.textContent = i18n[currentLang][statusKey];
                     
+                    // 继续动画
+                    requestAnimationFrame(animate);
+                }
+                
+                // 开始动画
+                requestAnimationFrame(animate);
+            }
+
+            function showProgress() {
+                progressOverlay.style.display = 'flex';
+                // 触发重排以启动动画
+                progressOverlay.offsetHeight;
+                progressOverlay.classList.add('show');
+            }
+
+            function hideProgress() {
+                progressOverlay.classList.remove('show');
+                setTimeout(() => {
+                    progressOverlay.style.display = 'none';
+                }, 300); // 等待动画完成
+            }
+
+            infoForm.onsubmit = async function(e) {
+                e.preventDefault();
+                if (!infoForm.checkValidity()) {
+                    infoForm.reportValidity();
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = currentLang === 'en' ? 'Processing...' : '处理中...';
+                
+                // 显示进度条弹出框
+                showProgress();
+                
+                // 开始进度条动画
+                updateProgressSmooth();
+
+                try {
+                    const formData = new FormData(infoForm);
+                    const response = await fetch('/calculate', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(await response.text());
+                    }
+
                     const result = await response.json();
                     
-                    // 隐藏进度条
-                    progressOverlay.classList.remove('show');
-                    setTimeout(() => {
-                        progressOverlay.style.display = 'none';
-                    }, 300);
-                    
-                    // 显示结果
-                    questionDisplay.textContent = result.question;
+                    // 显示问题
+                    const questionDisplay = document.getElementById('questionDisplay');
+                    questionDisplay.textContent = formData.get('question');
                     questionDisplay.style.display = 'block';
-                    aiInterpretation.textContent = result.interpretation;
-                    
-                    // 更新基本信息
-                    basicInfoContent.innerHTML = `
-                        <div class="mb-2"><strong>${i18n[currentLang]['birth_date']}:</strong> ${result.birth_date}</div>
-                        <div class="mb-2"><strong>${i18n[currentLang]['birth_time']}:</strong> ${result.birth_time}</div>
-                        <div class="mb-2"><strong>${i18n[currentLang]['gender']}:</strong> ${i18n[currentLang][`gender_${result.gender}`]}</div>
-                        <div class="mb-2"><strong>${i18n[currentLang]['birth_city']}:</strong> ${result.birth_city}</div>
-                        <div class="mb-2"><strong>${i18n[currentLang]['time_label']}:</strong> ${result.qimen_datetime}</div>
-                    `;
-                    
-                    // 更新九宫格
-                    const palaces = ['巽', '離', '坤', '震', '中', '兌', '艮', '坎', '乾'];
-                    palaces.forEach(palace => {
-                        const element = document.getElementById(`gong-${palace}`);
-                        if (element && result.pan_data && result.pan_data[palace]) {
-                            element.textContent = result.pan_data[palace];
+
+                    // 显示解读
+                    document.getElementById('aiInterpretation').textContent = result.interpretation || 
+                        (currentLang === 'en' ? 'No interpretation available.' : '暂无解读内容。');
+
+                    // 显示基本信息
+                    const basicInfo = result.basic_info;
+                    let basicInfoHtml = '';
+                    if (basicInfo && typeof basicInfo === 'object') {
+                        for (const key in basicInfo) {
+                            const value = basicInfo[key];
+                            if (value && typeof value === 'object') {
+                                basicInfoHtml += `<strong>${key}：</strong><br>`;
+                                for (const subKey in value) {
+                                    basicInfoHtml += `&nbsp;&nbsp;&nbsp;&nbsp;${subKey}：${value[subKey]}<br>`;
+                                }
+                            } else {
+                                basicInfoHtml += `<strong>${key}：</strong>${value ?? '—'}<br>`;
+                            }
                         }
-                    });
-                    
-                    // 显示结果容器
+                    } else {
+                        basicInfoHtml = currentLang === 'en' ? 
+                            '<em>No basic information available</em>' : 
+                            '<em>无可用基本信息</em>';
+                    }
+                    document.getElementById('basicInfoContent').innerHTML = basicInfoHtml;
+
+                    // 显示排盘图
+                    const palaceData = result.palace_data;
+                    if (palaceData) {
+                        for (const gong in palaceData) {
+                            const el = document.getElementById(`gong-${gong}`);
+                            const data = palaceData[gong];
+                            if (el && data) {
+                                el.innerHTML = ["神", "門", "星", "天盤", "地盤"]
+                                    .map(key => data[key] ? `${key}：${data[key]}` : '')
+                                    .filter(Boolean)
+                                    .join("<br>");
+                            }
+                        }
+                    }
+
+                    // 显示结果页面
                     pageInput.style.display = 'none';
                     resultContainer.style.display = 'block';
-                    
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+
                 } catch (error) {
-                    console.error('Error:', error);
-                    alert(i18n[currentLang]['error'] || '发生错误，请重试');
+                    alert(currentLang === 'en' ? 
+                        'Error: ' + error.message : 
+                        '错误：' + error.message);
+                    hideProgress();
                 } finally {
-                    // 恢复提交按钮
                     submitBtn.disabled = false;
                     submitBtn.textContent = i18n[currentLang]['submit_button'];
                 }
             };
 
-            // 返回按钮处理
+            // 返回按钮点击事件
             backBtn.onclick = function() {
+                // 隐藏进度条
+                hideProgress();
+                // 重置进度条状态
+                progressFill.style.width = '0%';
+                progressSteps.forEach(step => {
+                    step.classList.remove('active', 'completed');
+                });
+                progressStatus.textContent = '';
+                
+                // 清空结果页面的内容
+                document.getElementById('questionDisplay').style.display = 'none';
+                document.getElementById('questionDisplay').textContent = '';
+                document.getElementById('aiInterpretation').textContent = '';
+                document.getElementById('basicInfoContent').innerHTML = '';
+                
+                // 重置所有宫位内容
+                ['巽', '離', '坤', '震', '中', '兌', '艮', '坎', '乾'].forEach(gong => {
+                    const el = document.getElementById(`gong-${gong}`);
+                    if (el) el.innerHTML = '';
+                });
+                
+                // 重置表单
+                infoForm.reset();
+                
+                // 重新设置默认时间
+                const now = new Date();
+                const pad = n => n < 10 ? '0' + n : n;
+                const defaultTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+                document.getElementById('qimen_datetime').value = defaultTime;
+                document.getElementById('birth_date').value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+                
+                // 切换页面显示
                 resultContainer.style.display = 'none';
                 pageInput.style.display = 'block';
-                form.reset();
+                pageInput.scrollIntoView({ behavior: 'smooth' });
             };
-
-            // 设置默认时间
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
             
-            document.getElementById('birth_date').value = `${year}-${month}-${day}`;
-            document.getElementById('qimen_datetime').value = `${year}-${month}-${day}T${hours}:${minutes}`;
-        });
+            // 初始化语言
+            updateLanguage('zh-TW');
+            // ... existing code ...
     </script>
 </body>
 </html> 
