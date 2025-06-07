@@ -878,6 +878,8 @@
                 }
             };
 
+        document.addEventListener('DOMContentLoaded', function() {
+
             // 设置默认时间的函数
             function setDefaultDateTime() {
                 const now = new Date();
@@ -886,6 +888,9 @@
                 document.getElementById('qimen_datetime').value = defaultTime;
                 document.getElementById('birth_date').value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
             }
+
+            // 页面加载时设置默认时间
+            setDefaultDateTime();
 
             // 返回按钮点击事件
             backBtn.onclick = function() {
@@ -912,6 +917,7 @@
                 
                 // 重置表单
                 infoForm.reset();
+                setDefaultDateTime();
                 
                 // 重新设置默认时间
                 const now = new Date();
@@ -928,6 +934,7 @@
             
             // 初始化语言
             updateLanguage('zh-TW');
+        });
             // ... existing code ...
     </script>
 </body>
