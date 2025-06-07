@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>奇門解盤</title>
+  <style>
+    body {
+      background: #fafafa;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+      color: #222;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .main-container {
+      max-width: 400px;
+      margin: 40px auto 0 auto;
+      padding: 0 16px;
+    }
+    .title {
+      text-align: center;
+      font-size: 2.6rem;
+      font-weight: bold;
+      letter-spacing: 4px;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .divider {
+      border: none;
+      border-top: 2px solid #222;
+      width: 60%;
+      margin: 18px auto 24px auto;
+      opacity: 0.12;
+    }
+    .form-group {
+      margin-bottom: 22px;
+    }
+    .form-label {
+      display: block;
+      font-size: 1.08rem;
+      color: #444;
+      margin-bottom: 7px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+    .input-box, .form-select {
+      display: block;
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 12px 14px;
+      border: 1.5px solid #222;
+      border-radius: 12px;
+      background: #fff;
+      box-sizing: border-box;
+      outline: none;
+      transition: border 0.2s;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .input-box:focus, .form-select:focus {
+      border: 1.5px solid #555;
+    }
+    .main-btn {
+      display: block;
+      width: 100%;
+      background: #111;
+      color: #fff;
+      font-size: 1.3rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 0;
+      margin: 18px auto 30px auto;
+      cursor: pointer;
+      letter-spacing: 4px;
+      transition: background 0.2s, color 0.2s;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .main-btn:hover {
+      background: #fff;
+      color: #111;
+      border: 1.5px solid #111;
+    }
+    .centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .bagua-taiji {
+      margin: 32px 0 18px 0;
+      width: 160px;
+      height: 160px;
+      display: block;
+    }
+    .jiugong {
+      display: grid;
+      grid-template-columns: repeat(3, 54px);
+      grid-template-rows: repeat(3, 54px);
+      gap: 0;
+      margin: 0 auto 24px auto;
+      border: 2.5px solid #222;
+      border-radius: 8px;
+      background: #fff;
+      width: 164px;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .jiugong-cell {
+      border: 1.5px solid #222;
+      border-right: none;
+      border-bottom: none;
+      font-size: 2.1rem;
+      font-weight: bold;
+      color: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .jiugong-cell:nth-child(3n) {
+      border-right: 0;
+    }
+    .jiugong-cell:nth-child(n+7) {
+      border-bottom: 0;
+    }
+    .interpretation {
+      text-align: center;
+      color: #444;
+      font-size: 1.15rem;
+      margin: 18px 0 30px 0;
+      min-height: 48px;
+      line-height: 1.7;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .back-btn {
+      display: inline-block;
+      margin: 0 auto 0 0;
+      background: none;
+      border: none;
+      color: #222;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 8px 18px;
+      border-radius: 16px;
+      border: 1.2px solid #222;
+      transition: background 0.2s, color 0.2s;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .back-btn:hover {
+      background: #222;
+      color: #fff;
+    }
+    .lang-btn {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      opacity: 0.7;
+      z-index: 10;
+    }
+    .lang-btn svg {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+    .lang-select-pop {
+      position: fixed;
+      right: 18px;
+      bottom: 60px;
+      background: #fff;
+      border: 1.5px solid #222;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      z-index: 20;
+      min-width: 120px;
+      padding: 8px 0;
+      display: none;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .lang-option {
+      padding: 10px 18px;
+      font-size: 1.1rem;
+      color: #222;
+      cursor: pointer;
+      text-align: left;
+      background: #fff;
+      border: none;
+      width: 100%;
+      outline: none;
+      transition: background 0.2s;
+      font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+    }
+    .lang-option:hover, .lang-option.selected {
+      background: #222;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <!-- 页面一：输入信息 -->
+    <div id="page-input">
+      <div class="title" id="titleText">奇門解盤</div>
+      <hr class="divider">
+      <form id="infoForm" autocomplete="off">
+        <div class="form-group">
+          <label class="form-label" for="birth">生辰八字（公历）</label>
+          <input type="datetime-local" id="birth" name="birth" class="input-box" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="gender">性別</label>
+          <select id="gender" name="gender" class="form-select" required>
+            <option value="">請選擇</option>
+            <option value="male">男</option>
+            <option value="female">女</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="birthplace">出生地點</label>
+          <input type="text" id="birthplace" name="birthplace" class="input-box" placeholder="如：台北市" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="qimenTime">起局時間</label>
+          <input type="datetime-local" id="qimenTime" name="qimenTime" class="input-box" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="question">您的問題</label>
+          <textarea id="question" name="question" class="input-box" placeholder="请输入您的问题，如：我今年的财运如何？" rows="3" required style="resize:vertical;"></textarea>
+        </div>
+        <button type="button" class="main-btn" id="startBtn">解盤</button>
+      </form>
+    </div>
+    <!-- 页面二：解读展示 -->
+    <div id="page-result" style="display:none;">
+      <div class="centered">
+        <img class="bagua-taiji" alt="八卦太極" src="bagua-taiji.png"/>
+        <div class="jiugong">
+          <div class="jiugong-cell">九</div>
+          <div class="jiugong-cell">四</div>
+          <div class="jiugong-cell">二</div>
+          <div class="jiugong-cell">三</div>
+          <div class="jiugong-cell">五</div>
+          <div class="jiugong-cell">七</div>
+          <div class="jiugong-cell">八</div>
+          <div class="jiugong-cell">一</div>
+          <div class="jiugong-cell">六</div>
+        </div>
+        <div class="interpretation" id="interpretationText">這裡將展示您的解盤結果。</div>
+        <button class="back-btn" id="backBtn">返回</button>
+      </div>
+    </div>
+    <!-- 语言选择按钮和弹窗 -->
+    <button class="lang-btn" id="langBtn" title="切換語言">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+    </button>
+    <div class="lang-select-pop" id="langPop">
+      <button class="lang-option selected" data-lang="zh-TW">繁體中文</button>
+      <button class="lang-option" data-lang="en">English</button>
+      <button class="lang-option" data-lang="zh-CN">简体中文</button>
+    </div>
+  </div>
+  <script>
+    // 多语言文本
+    const i18n = {
+      'zh-TW': {
+        title: '奇門解盤',
+        birth: '生辰八字（公曆）',
+        gender: '性別',
+        birthplace: '出生地點',
+        qimenTime: '起局時間',
+        question: '您的問題',
+        btn: '解盤',
+        result: '這裡將展示您的解盤結果。',
+        back: '返回',
+        placeholder_birthplace: '如：台北市',
+        placeholder_question: '請輸入您的問題，如：我今年的財運如何？',
+        gender_male: '男',
+        gender_female: '女',
+        gender_select: '請選擇',
+      },
+      'en': {
+        title: 'Qi Men Divination',
+        birth: 'Birth Date & Time',
+        gender: 'Gender',
+        birthplace: 'Birth Place',
+        qimenTime: 'Divination Time',
+        question: 'Your Question',
+        btn: 'Divine',
+        result: 'Your divination result will appear here.',
+        back: 'Back',
+        placeholder_birthplace: 'e.g. Taipei',
+        placeholder_question: 'Please enter your question, e.g. How is my fortune this year?',
+        gender_male: 'Male',
+        gender_female: 'Female',
+        gender_select: 'Please select',
+      },
+      'zh-CN': {
+        title: '奇门解盘',
+        birth: '生辰八字（公历）',
+        gender: '性别',
+        birthplace: '出生地点',
+        qimenTime: '起局时间',
+        question: '您的问题',
+        btn: '解盘',
+        result: '这里将展示您的解盘结果。',
+        back: '返回',
+        placeholder_birthplace: '如：北京市',
+        placeholder_question: '请输入您的问题，如：我今年的财运如何？',
+        gender_male: '男',
+        gender_female: '女',
+        gender_select: '请选择',
+      }
+    };
+    let currentLang = 'zh-TW';
+    function updateLang(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      document.getElementById('titleText').textContent = i18n[lang].title;
+      document.querySelector('label[for="birth"]').textContent = i18n[lang].birth;
+      document.querySelector('label[for="gender"]').textContent = i18n[lang].gender;
+      document.querySelector('label[for="birthplace"]').textContent = i18n[lang].birthplace;
+      document.querySelector('label[for="qimenTime"]').textContent = i18n[lang].qimenTime;
+      document.querySelector('label[for="question"]').textContent = i18n[lang].question;
+      document.getElementById('birthplace').placeholder = i18n[lang].placeholder_birthplace;
+      document.getElementById('question').placeholder = i18n[lang].placeholder_question;
+      document.getElementById('startBtn').textContent = i18n[lang].btn;
+      document.getElementById('interpretationText').textContent = i18n[lang].result;
+      document.getElementById('backBtn').textContent = i18n[lang].back;
+      // 性别选项
+      const genderSel = document.getElementById('gender');
+      genderSel.options[0].text = i18n[lang].gender_select;
+      genderSel.options[1].text = i18n[lang].gender_male;
+      genderSel.options[2].text = i18n[lang].gender_female;
+      // 语言选项高亮
+      document.querySelectorAll('.lang-option').forEach(btn => {
+        btn.classList.toggle('selected', btn.getAttribute('data-lang') === lang);
+      });
+    }
+    // 页面切换逻辑
+    const pageInput = document.getElementById('page-input');
+    const pageResult = document.getElementById('page-result');
+    const startBtn = document.getElementById('startBtn');
+    const backBtn = document.getElementById('backBtn');
+    const infoForm = document.getElementById('infoForm');
+    const interpretationText = document.getElementById('interpretationText');
+    // 默认起局时间为当前
+    function setNowToInput(id) {
+      const now = new Date();
+      const pad = n => n<10 ? '0'+n : n;
+      const val = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+      document.getElementById(id).value = val;
+    }
+    setNowToInput('qimenTime');
+    // 事件
+    startBtn.onclick = function() {
+      if (!infoForm.reportValidity()) return;
+      // 这里可以模拟生成解盘内容
+      interpretationText.textContent = currentLang==='en' ? `This is a mock result. Connect to AI for real answer.` : `（此處為模擬解盤內容，實際可接入AI或後端）`;
+      pageInput.style.display = 'none';
+      pageResult.style.display = 'block';
+    };
+    backBtn.onclick = function() {
+      pageResult.style.display = 'none';
+      pageInput.style.display = 'block';
+    };
+    // 语言选择弹窗逻辑
+    const langBtn = document.getElementById('langBtn');
+    const langPop = document.getElementById('langPop');
+    langBtn.onclick = function(e) {
+      langPop.style.display = langPop.style.display === 'block' ? 'none' : 'block';
+      e.stopPropagation();
+    };
+    document.querySelectorAll('.lang-option').forEach(btn => {
+      btn.onclick = function() {
+        updateLang(this.getAttribute('data-lang'));
+        langPop.style.display = 'none';
+      };
+    });
+    document.body.onclick = function(e) {
+      if (!langPop.contains(e.target) && e.target !== langBtn) {
+        langPop.style.display = 'none';
+      }
+    };
+    // 初始化默认语言
+    updateLang('zh-TW');
+  </script>
+</body>
+</html> 
