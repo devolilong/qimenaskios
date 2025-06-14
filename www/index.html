@@ -474,7 +474,7 @@
                     </div>
                 </div>
 
-                <!-- <button class="back-btn" id="backBtn" data-i18n="back">返回</button> -->
+<!--                 <button class="back-btn" id="backBtn" data-i18n="back">返回</button> -->
 
                 <!-- ✅ 再问一个问题按钮（自动跳转首页 + 自动填时间） -->
                 <button class="back-btn" id="askAgainBtn" style="margin-left: 12px;" data-i18n="ask_again">
@@ -831,25 +831,25 @@
             };
 
             // 返回按钮点击事件
-            backBtn.onclick = function() {
-                document.getElementById('langBtn').style.display = 'block'; // ✅ 重新显示语言按钮
-                resultContainer.style.display = 'none';
-                pageInput.style.display = 'block';
-                pageInput.scrollIntoView({ behavior: 'smooth' });
+            // backBtn.onclick = function() {
+            //     document.getElementById('langBtn').style.display = 'block'; // ✅ 重新显示语言按钮
+            //     resultContainer.style.display = 'none';
+            //     pageInput.style.display = 'block';
+            //     pageInput.scrollIntoView({ behavior: 'smooth' });
             
-                // ✅ 隐藏进度条弹出框
-                hideProgress();
+            //     // ✅ 隐藏进度条弹出框
+            //     hideProgress();
             
-                // ✅ 重置进度条状态
-                progressFill.style.width = '0%';
-                progressLabels.forEach(label => label.classList.remove('active'));
-                progressStatus.textContent = '';
+            //     // ✅ 重置进度条状态
+            //     progressFill.style.width = '0%';
+            //     progressLabels.forEach(label => label.classList.remove('active'));
+            //     progressStatus.textContent = '';
             
-                // ✅ 清空结果显示内容（可选）
-                document.getElementById('aiInterpretation').textContent = '';
-                document.getElementById('basicInfoContent').innerHTML = '';
-                document.getElementById('questionDisplay').style.display = 'none';
-            };
+            //     // ✅ 清空结果显示内容（可选）
+            //     document.getElementById('aiInterpretation').textContent = '';
+            //     document.getElementById('basicInfoContent').innerHTML = '';
+            //     document.getElementById('questionDisplay').style.display = 'none';
+            // };
 
             // 设置默认时间
             const now = new Date();
