@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="page_title">奇門解盤</title>
+    <style>
+        body {
+            background: #fafafa;
+            font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+            color: #222;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .main-container {
+            max-width: 800px;
+            margin: 40px auto 0 auto;
+            padding: 0 16px;
+        }
+        .title {
+            text-align: center;
+            font-size: 2.6rem;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+        }
+        .divider {
+            border: none;
+            border-top: 2px solid #222;
+            width: 60%;
+            margin: 18px auto 24px auto;
+            opacity: 0.12;
+        }
+        .form-group {
+            margin-bottom: 22px;
+        }
+        .form-label {
+            display: block;
+            font-size: 1.08rem;
+            color: #444;
+            margin-bottom: 7px;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        .hint-inline {
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+            margin-left: 6px;
+        }
+        .input-box, .form-select {
+            display: block;
+            width: 100%;
+            font-size: 1.1rem;
+            padding: 12px 14px;
+            border: 1.5px solid #222;
+            border-radius: 12px;
+            background: #fff;
+            box-sizing: border-box;
+            outline: none;
+            transition: border 0.2s;
+            font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+        }
+        .input-box:focus, .form-select:focus {
+            border: 1.5px solid #555;
+        }
+        .main-btn {
+            display: block;
+            width: 100%;
+            background: #111;
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 24px;
+            padding: 12px 0;
+            margin: 18px auto 30px auto;
+            cursor: pointer;
+            letter-spacing: 4px;
+            transition: background 0.2s, color 0.2s;
+            font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+        }
+        .main-btn:hover {
+            background: #fff;
+            color: #111;
+            border: 1.5px solid #111;
+        }
+        .main-btn:disabled {
+            background: #ccc;
+            color: #666;
+            cursor: not-allowed;
+            border: none;
+        }
+        .centered {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .result-container {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1.5px solid #222;
+            border-radius: 12px;
+            background: #fff;
+        }
+        .interpretation-content {
+            font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+        }
+        .ai-interpretation {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            color: #444;
+        }
+        .card {
+            margin-bottom: 20px;
+            border: 1.5px solid #222;
+            border-radius: 12px;
+            background: #fff;
+        }
+        .card-header {
+            background: #fff;
+            border-bottom: 1.5px solid #222;
+            padding: 15px 20px;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .question-highlight {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border-left: 4px solid #222;
+            font-size: 1.1rem;
+            color: #444;
+        }
+        .language-selector {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            z-index: 1000;
+        }
+        .lang-btn {
+            position: fixed;
+            right: 18px;
+            top: 60px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.7;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+            z-index: 1000;
+        }
+        .lang-btn:hover {
+            background: rgba(0,0,0,0.05);
+            opacity: 1;
+        }
+        .lang-btn svg {
+            width: 32px;
+            height: 32px;
+            display: block;
+        }
+        .lang-select-pop {
+            position: fixed;
+            right: 18px;
+            top: calc(60px + 42px);
+            background: #fff;
+            border: 1.5px solid #222;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            z-index: 1001;
+            min-width: 120px;
+            padding: 8px 0;
+            display: none;
+        }
+        .lang-option {
+            padding: 10px 18px;
+            font-size: 1.1rem;
+            color: #222;
+            cursor: pointer;
+            text-align: left;
+            background: #fff;
+            border: none;
+            width: 100%;
+            outline: none;
+            transition: background 0.2s;
+        }
+        .lang-option:hover, .lang-option.selected {
+            background: #222;
+            color: #fff;
+        }
+        .qimen-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: #222;
+            border: 1.5px solid #222;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .qimen-grid .palace {
+            background: #fff;
+            padding: 15px;
+            min-height: 120px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .back-btn {
+            display: inline-block;
+            margin: 20px auto 0 0;
+            background: none;
+            border: 1.2px solid #222;
+            color: #222;
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px 18px;
+            border-radius: 16px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .back-btn:hover {
+            background: #222;
+            color: #fff;
+        }
+        .progress-disclaimer {
+            margin-top: 16px;          /* 空一行的间距 */
+            text-align: center;        /* 居中显示文字 */
+            font-size: 0.95rem;
+            color: #888;
+            line-height: 1.6;
+            font-style: italic;
+            white-space: pre-line;     /* 支持换行符 \n */
+        }
+        .hint-text {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        /* 进度条弹出框样式 */
+        .progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .progress-overlay.show {
+            opacity: 1;
+        }
+        .progress-container {
+            background: #fff;
+            border: 1.5px solid #222;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .progress-overlay.show .progress-container {
+            transform: translateY(0);
+        }
+        .progress-title {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: #222;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+            position: relative;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #222;
+            border-radius: 4px;
+            transition: width 0.5s ease-in-out;
+        }
+        .progress-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            position: relative;
+            padding: 0 10px;
+        }
+        .progress-label {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            font-size: 0.9rem;
+            color: #666;
+            transition: all 0.3s;
+            padding: 0 5px;
+        }
+        .progress-label.active {
+            color: #222;
+            font-weight: 500;
+            transform: scale(1.05);
+        }
+        .progress-status {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #444;
+            margin-top: 20px;
+            min-height: 24px;
+            font-weight: 500;
+        }
+        .time-hint {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- 语言选择按钮和弹窗 -->
+        <button class="lang-btn" id="langBtn" title="切換語言" aria-label="切換語言">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+        </button>
+        <div class="lang-select-pop" id="langPop" role="menu" aria-label="語言選擇">
+            <button class="lang-option selected" data-lang="zh-TW" role="menuitem">繁體中文</button>
+            <button class="lang-option" data-lang="en" role="menuitem">English</button>
+            <button class="lang-option" data-lang="zh-CN" role="menuitem">简体中文</button>
+        </div>
+
+        <!-- 页面一：输入信息 -->
+        <div id="page-input">
+            <div class="title" id="titleText" data-i18n="main_title">奇門解盤</div>
+            <hr class="divider">
+            <form id="infoForm" autocomplete="off">
+                <input type="hidden" id="langInput" name="lang" value="zh-TW">
+                <input type="hidden" id="method" name="method" value="chabu">
+                <input type="hidden" id="type" name="type" value="shijia">
+                
+                <div class="form-group">
+                    <label class="form-label" for="birth_date" data-i18n="birth_date">出生日期</label>
+                    <input type="date" id="birth_date" name="birth_date" class="input-box" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="birth_time" data-i18n="birth_time">出生時辰</label>
+                    <select id="birth_time" name="birth_time" class="form-select" required>
+                        <option value="" data-i18n="please_select">請選擇</option>
+                        <option value="子" data-i18n="hour_zi">子時（23:00 ~ 00:59）</option>
+                        <option value="丑" data-i18n="hour_chou">丑時（01:00 ~ 02:59）</option>
+                        <option value="寅" data-i18n="hour_yin">寅時（03:00 ~ 04:59）</option>
+                        <option value="卯" data-i18n="hour_mao">卯時（05:00 ~ 06:59）</option>
+                        <option value="辰" data-i18n="hour_chen">辰時（07:00 ~ 08:59）</option>
+                        <option value="巳" data-i18n="hour_si">巳時（09:00 ~ 10:59）</option>
+                        <option value="午" data-i18n="hour_wu">午時（11:00 ~ 12:59）</option>
+                        <option value="未" data-i18n="hour_wei">未時（13:00 ~ 14:59）</option>
+                        <option value="申" data-i18n="hour_shen">申時（15:00 ~ 16:59）</option>
+                        <option value="酉" data-i18n="hour_you">酉時（17:00 ~ 18:59）</option>
+                        <option value="戌" data-i18n="hour_xu">戌時（19:00 ~ 20:59）</option>
+                        <option value="亥" data-i18n="hour_hai">亥時（21:00 ~ 22:59）</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="gender" data-i18n="gender">性別</label>
+                    <select id="gender" name="gender" class="form-select" required>
+                        <option value="" data-i18n="please_select">請選擇</option>
+                        <option value="male" data-i18n="gender_male">男</option>
+                        <option value="female" data-i18n="gender_female">女</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="birth_city" data-i18n="birth_city">出生地點</label>
+                    <input type="text" id="birth_city" name="birth_city" class="input-box" required data-i18n-placeholder="birth_city_placeholder">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="qimen_datetime" data-i18n="time_label">
+                        排盤時間
+                        <span class="hint-inline" data-i18n="time_method_hint">（預設使用時家拆補法）</span>
+                    </label>
+                    <input type="datetime-local" id="qimen_datetime" name="qimen_datetime" class="input-box" required>
+                    <div class="hint-text" data-i18n="time_method_hint">預設使用時家拆補法</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="question" data-i18n="question_label">您的問題</label>
+                    <textarea id="question" name="question" class="input-box" rows="3" required style="resize:vertical;" data-i18n-placeholder="question_placeholder"></textarea>
+                </div>
+
+                <button type="submit" class="main-btn" id="submitBtn" data-i18n="submit_button">解盤</button>
+            </form>
+
+            <!-- 进度条弹出框 -->
+            <div class="progress-overlay" id="progressOverlay">
+                <div class="progress-container">
+                    <div class="progress-title">奇門解盤進行中</div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+
+                    <div class="progress-labels">
+                        <div class="progress-label" id="label1">建立奇門局</div>
+                        <div class="progress-label" id="label2">分析天地人盤</div>
+                        <div class="progress-label" id="label3">提取八門八神</div>
+                        <div class="progress-label" id="label4">洞察未來玄機</div>
+                    </div>
+
+                    <div class="progress-disclaimer">
+                        ⚠️ 結果僅供娛樂，切勿過度解讀。<br>
+                        解盤約需1分鐘，請耐心等待。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面二：解读展示 -->
+        <div id="resultContainer" class="result-container" style="display:none;">
+            <div class="centered">
+                <div class="card mb-4">
+                    <div class="card-header" data-i18n="card_interpretation">排盤解讀</div>
+                    <div class="card-body">
+                        <div id="questionDisplay" class="question-highlight" style="display: none;"></div>
+                        <div id="aiInterpretation" class="ai-interpretation"></div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header" data-i18n="card_pan">排盤圖</div>
+                    <div class="card-body">
+                        <div class="qimen-grid">
+                            <div class="palace" id="gong-巽"></div>
+                            <div class="palace" id="gong-離"></div>
+                            <div class="palace" id="gong-坤"></div>
+                            <div class="palace" id="gong-震"></div>
+                            <div class="palace" id="gong-中"></div>
+                            <div class="palace" id="gong-兌"></div>
+                            <div class="palace" id="gong-艮"></div>
+                            <div class="palace" id="gong-坎"></div>
+                            <div class="palace" id="gong-乾"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header" data-i18n="card_basic_info">排盤基本信息</div>
+                    <div class="card-body" id="basicInfoContent">
+                        <!-- 后续用 JS 插入内容 -->
+                    </div>
+                </div>
+
+                <button class="back-btn" id="backBtn" data-i18n="back">返回</button>
+
+                <!-- ✅ 再问一个问题按钮（自动跳转首页 + 自动填时间） -->
+                <button class="back-btn" id="askAgainBtn" style="margin-left: 12px;" data-i18n="ask_again">
+                    再問一個問題（自動換時辰）
+                  </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const i18n = {
+            'zh-TW': {
+                'page_title': '奇門解盤',
+                'main_title': '奇門解盤',
+                'time_label': '排盤時間',
+                'time_method_hint': '預設使用時家拆補法',
+                'birth_date': '出生日期',
+                'birth_time': '出生時辰',
+                'gender': '性別',
+                'gender_male': '男',
+                'gender_female': '女',
+                'birth_city': '出生地點',
+                'birth_city_placeholder': '如：台北市',
+                'question_label': '您的問題',
+                'question_placeholder': '請輸入您想要諮詢的問題...如：我今年運勢如何？我和男友今年感情發展如何？',
+                'please_select': '請選擇',
+                'submit_button': '解盤',
+                'card_interpretation': '排盤解讀',
+                'card_pan': '排盤圖',
+                'hour_zi': '子時（23:00 ~ 00:59）',
+                'hour_chou': '丑時（01:00 ~ 02:59）',
+                'hour_yin': '寅時（03:00 ~ 04:59）',
+                'hour_mao': '卯時（05:00 ~ 06:59）',
+                'hour_chen': '辰時（07:00 ~ 08:59）',
+                'hour_si': '巳時（09:00 ~ 10:59）',
+                'hour_wu': '午時（11:00 ~ 12:59）',
+                'hour_wei': '未時（13:00 ~ 14:59）',
+                'hour_shen': '申時（15:00 ~ 16:59）',
+                'hour_you': '酉時（17:00 ~ 18:59）',
+                'hour_xu': '戌時（19:00 ~ 20:59）',
+                'hour_hai': '亥時（21:00 ~ 22:59）',
+                'step_1': '建立奇門局',
+                'step_2': '分析天地人盤',
+                'step_3': '提取八門八神',
+                'step_4': '洞察未來玄機',
+                'status_1': '正在建立奇門局...',
+                'status_2': '分析天盤、地盤與人盤...',
+                'status_3': '提取八門八神...',
+                'status_4': '洞察未來玄機...',
+                'complete': '解盤完成！',
+                'progress_title': '奇門解盤進行中',
+                'ask_again': '再問一個問題（自動換時辰）', // 繁體
+                'disclaimer_text': '⚠️ AI解讀奇門遁甲僅供娛樂參考,請勿過度解讀。\n解盤過程需約1分鐘，請耐心等待...'
+            },
+            'en': {
+                'page_title': 'Qi Men Divination',
+                'main_title': 'Qi Men Divination',
+                'time_label': 'Divination Time',
+                'time_method_hint': 'Default: Shi Jia Method (Split & Patch)',
+                'birth_date': 'Birth Date',
+                'birth_time': 'Birth Time',
+                'gender': 'Gender',
+                'gender_male': 'Male',
+                'gender_female': 'Female',
+                'birth_city': 'Birth Place',
+                'birth_city_placeholder': 'e.g. Los Angeles',
+                'question_label': 'Your Question',
+                'question_placeholder': 'Enter your question here...i.e. How will my career be in 2025?',
+                'please_select': 'Please select',
+                'submit_button': 'Divine',
+                'card_interpretation': 'Interpretation',
+                'card_pan': 'Pan Chart',
+                'hour_zi': 'Zi Hour (23:00 ~ 00:59)',
+                'hour_chou': 'Chou Hour (01:00 ~ 02:59)',
+                'hour_yin': 'Yin Hour (03:00 ~ 04:59)',
+                'hour_mao': 'Mao Hour (05:00 ~ 06:59)',
+                'hour_chen': 'Chen Hour (07:00 ~ 08:59)',
+                'hour_si': 'Si Hour (09:00 ~ 10:59)',
+                'hour_wu': 'Wu Hour (11:00 ~ 12:59)',
+                'hour_wei': 'Wei Hour (13:00 ~ 14:59)',
+                'hour_shen': 'Shen Hour (15:00 ~ 16:59)',
+                'hour_you': 'You Hour (17:00 ~ 18:59)',
+                'hour_xu': 'Xu Hour (19:00 ~ 20:59)',
+                'hour_hai': 'Hai Hour (21:00 ~ 22:59)',
+                'step_1': 'Establish Qi Men',
+                'step_2': 'Analyze Charts',
+                'step_3': 'Extract Elements',
+                'step_4': 'Divine Future',
+                'status_1': 'Establishing Qi Men chart...',
+                'status_2': 'Analyzing Heaven, Earth & Human charts...',
+                'status_3': 'Extracting Eight Gates & Deities...',
+                'status_4': 'Divining future insights...',
+                'complete': 'Divination Complete!',
+                'progress_title': 'Qi Men Divination in Progress',
+                'ask_again': 'Ask another question (auto next hour)', // English
+                'disclaimer_text': '⚠️ AI-based Qi Men Dun Jia interpretation is for entertainment only.\nPlease do not take it too seriously. The process takes about 1 minute. Please wait patiently...'
+            },
+            'zh-CN': {
+                'page_title': '奇门解盘',
+                'main_title': '奇门解盘',
+                'time_label': '排盘时间',
+                'time_method_hint': '默认使用时家拆补法',
+                'birth_date': '出生日期',
+                'birth_time': '出生时辰',
+                'gender': '性别',
+                'gender_male': '男',
+                'gender_female': '女',
+                'birth_city': '出生地点',
+                'birth_city_placeholder': '如：北京市',
+                'question_label': '您的问题',
+                'question_placeholder': '请输入您想要咨询的问题...如：我今年财运如何？我和男友今年感情发展如何？',
+                'please_select': '请选择',
+                'submit_button': '解盘',
+                'card_interpretation': '解盘结果',
+                'card_pan': '排盘图',
+                'hour_zi': '子时（23:00 ~ 00:59）',
+                'hour_chou': '丑时（01:00 ~ 02:59）',
+                'hour_yin': '寅时（03:00 ~ 04:59）',
+                'hour_mao': '卯时（05:00 ~ 06:59）',
+                'hour_chen': '辰时（07:00 ~ 08:59）',
+                'hour_si': '巳时（09:00 ~ 10:59）',
+                'hour_wu': '午时（11:00 ~ 12:59）',
+                'hour_wei': '未时（13:00 ~ 14:59）',
+                'hour_shen': '申时（15:00 ~ 16:59）',
+                'hour_you': '酉时（17:00 ~ 18:59）',
+                'hour_xu': '戌时（19:00 ~ 20:59）',
+                'hour_hai': '亥时（21:00 ~ 22:59）',
+                'step_1': '建立奇门局',
+                'step_2': '分析天地人盘',
+                'step_3': '提取八门八神',
+                'step_4': '洞察未来玄机',
+                'status_1': '正在建立奇门局...',
+                'status_2': '分析天盘、地盘与人盘...',
+                'status_3': '提取八门八神...',
+                'status_4': '洞察未来玄机...',
+                'complete': '解盘完成！',
+                'progress_title': '奇门解盘进行中',
+                'ask_again': '再问一个问题（自动换时辰）', // 简体
+                'disclaimer_text': '⚠️ AI解盘仅供娱乐参考,请勿过度解读。\n解盘过程需约1分钟,请耐心等待...'
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // ✅ 正确生成本地 ISO 字符串（yyyy-MM-ddTHH:mm）
+            function toLocalDatetimeInputString(date) {
+                const pad = n => n < 10 ? '0' + n : n;
+                return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+            }
+
+            
+            // 语言切换功能
+            const langBtn = document.getElementById('langBtn');
+            const langPop = document.getElementById('langPop');
+            const langOptions = document.querySelectorAll('.lang-option');
+            let currentLang = 'zh-TW';
+
+            function updateLanguage(lang) {
+                currentLang = lang;
+                document.documentElement.lang = lang;
+                document.getElementById('langInput').value = lang;
+                
+                // 更新所有带有data-i18n属性的元素
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    const key = element.getAttribute('data-i18n');
+                    if (i18n[lang][key]) {
+                        if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                            element.placeholder = i18n[lang][key];
+                        } else {
+                            element.textContent = i18n[lang][key];
+                        }
+                    }
+                });
+
+                // 更新所有带有data-i18n-placeholder属性的元素
+                document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                    const key = element.getAttribute('data-i18n-placeholder');
+                    if (i18n[lang][key]) {
+                        element.placeholder = i18n[lang][key];
+                    }
+                });
+
+                // 更新语言选项高亮
+                langOptions.forEach(btn => {
+                    btn.classList.toggle('selected', btn.getAttribute('data-lang') === lang);
+                });
+
+                // 更新提示文本
+                const methodHint = document.getElementById('methodHint');
+                const typeHint = document.getElementById('typeHint');
+                if (methodHint) methodHint.textContent = i18n[lang]['hint_method'] || '';
+                if (typeHint) typeHint.textContent = i18n[lang]['hint_type'] || '';
+            }
+
+            // 语言切换按钮点击事件
+            langBtn.onclick = function(e) {
+                langPop.style.display = langPop.style.display === 'block' ? 'none' : 'block';
+                e.stopPropagation();
+            };
+
+            // 语言选项点击事件
+            langOptions.forEach(btn => {
+                btn.onclick = function() {
+                    updateLanguage(this.getAttribute('data-lang'));
+                    langPop.style.display = 'none';
+                };
+            });
+
+            // 点击其他地方关闭语言选择弹窗
+            document.body.onclick = function(e) {
+                if (!langPop.contains(e.target) && e.target !== langBtn) {
+                    langPop.style.display = 'none';
+                }
+            };
+
+            // 表单提交处理
+            const infoForm = document.getElementById('infoForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const pageInput = document.getElementById('page-input');
+            const resultContainer = document.getElementById('resultContainer');
+            const backBtn = document.getElementById('backBtn');
+
+            // 进度条相关变量
+            const progressOverlay = document.getElementById('progressOverlay');
+            const progressFill = document.getElementById('progressFill');
+            const progressLabels = document.querySelectorAll('.progress-label');
+            const progressStatus = document.getElementById('progressStatus');
+
+            let current = 0;
+
+            function animateProgress() {
+                if (current < progressLabels.length) {
+                    progressLabels.forEach((label, idx) => {
+                        label.classList.toggle('active', idx === current);
+                    });
+                    progressFill.style.width = ((current + 1) / progressLabels.length * 100) + '%';
+                    current++;
+                    setTimeout(animateProgress, 13000); // 每步13秒
+                } else {
+                    progressLabels.forEach(label => label.classList.add('active'));
+                    progressFill.style.width = '100%';
+                }
+            }
+
+            function showProgress() {
+                progressOverlay.style.display = 'flex';
+                // 触发重排以启动动画
+                progressOverlay.offsetHeight;
+                progressOverlay.classList.add('show');
+            }
+
+            function hideProgress() {
+                progressOverlay.classList.remove('show');
+                setTimeout(() => {
+                    progressOverlay.style.display = 'none';
+                }, 300); // 等待动画完成
+            }
+
+            infoForm.onsubmit = async function(e) {
+                e.preventDefault();
+                if (!infoForm.checkValidity()) {
+                    infoForm.reportValidity();
+                    return;
+                }
+
+                submitBtn.disabled = true;
+                submitBtn.textContent = currentLang === 'en' ? 'Processing...' : '处理中...';
+                
+                // 显示进度条弹出框
+                showProgress();
+                
+                // 开始进度条动画
+                animateProgress();
+
+                try {
+                    const formData = new FormData(infoForm);
+                    const API_BASE = "https://your-backend-name.onrender.com";
+
+                    const response = await fetch(`${API_BASE}/calculate`, {
+                    method: 'POST',
+                    body: formData
+                    });
+
+
+                    if (!response.ok) {
+                        throw new Error(await response.text());
+                    }
+
+                    const result = await response.json();
+                    
+                    // 显示问题
+                    const questionDisplay = document.getElementById('questionDisplay');
+                    questionDisplay.textContent = formData.get('question');
+                    questionDisplay.style.display = 'block';
+
+                    // 显示解读
+                    document.getElementById('aiInterpretation').textContent = result.interpretation || 
+                        (currentLang === 'en' ? 'No interpretation available.' : '暂无解读内容。');
+
+                    // 显示基本信息
+                    const basicInfo = result.basic_info;
+                    let basicInfoHtml = '';
+                    if (basicInfo && typeof basicInfo === 'object') {
+                        for (const key in basicInfo) {
+                            const value = basicInfo[key];
+                            if (value && typeof value === 'object') {
+                                basicInfoHtml += `<strong>${key}：</strong><br>`;
+                                for (const subKey in value) {
+                                    basicInfoHtml += `&nbsp;&nbsp;&nbsp;&nbsp;${subKey}：${value[subKey]}<br>`;
+                                }
+                            } else {
+                                basicInfoHtml += `<strong>${key}：</strong>${value ?? '—'}<br>`;
+                            }
+                        }
+                    } else {
+                        basicInfoHtml = currentLang === 'en' ? 
+                            '<em>No basic information available</em>' : 
+                            '<em>无可用基本信息</em>';
+                    }
+                    document.getElementById('basicInfoContent').innerHTML = basicInfoHtml;
+
+                    // 显示排盘图
+                    const palaceData = result.palace_data;
+                    if (palaceData) {
+                        for (const gong in palaceData) {
+                            const el = document.getElementById(`gong-${gong}`);
+                            const data = palaceData[gong];
+                            if (el && data) {
+                                el.innerHTML = ["神", "門", "星", "天盤", "地盤"]
+                                    .map(key => data[key] ? `${key}：${data[key]}` : '')
+                                    .filter(Boolean)
+                                    .join("<br>");
+                            }
+                        }
+                    }
+
+                    // 显示结果页面
+                    pageInput.style.display = 'none';
+                    resultContainer.style.display = 'block';
+                    document.getElementById('langBtn').style.display = 'none'; // 隐藏语言按钮
+                    resultContainer.scrollIntoView({ behavior: 'smooth' });
+
+                } catch (error) {
+                    alert(currentLang === 'en' ? 
+                        'Error: ' + error.message : 
+                        '错误：' + error.message);
+                    hideProgress();
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = i18n[currentLang]['submit_button'];
+                }
+            };
+
+            // 返回按钮点击事件
+            backBtn.onclick = function() {
+                document.getElementById('langBtn').style.display = 'block'; // ✅ 重新显示语言按钮
+                resultContainer.style.display = 'none';
+                pageInput.style.display = 'block';
+                pageInput.scrollIntoView({ behavior: 'smooth' });
+            
+                // ✅ 隐藏进度条弹出框
+                hideProgress();
+            
+                // ✅ 重置进度条状态
+                progressFill.style.width = '0%';
+                progressLabels.forEach(label => label.classList.remove('active'));
+                progressStatus.textContent = '';
+            
+                // ✅ 清空结果显示内容（可选）
+                document.getElementById('aiInterpretation').textContent = '';
+                document.getElementById('basicInfoContent').innerHTML = '';
+                document.getElementById('questionDisplay').style.display = 'none';
+            };
+
+            // 设置默认时间
+            const now = new Date();
+            const pad = n => n < 10 ? '0' + n : n;
+            const defaultTime = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+            document.getElementById('qimen_datetime').value = defaultTime;
+
+            // 设置默认出生日期（当前日期）
+            document.getElementById('birth_date').value = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+
+            // 初始化语言
+            updateLanguage('zh-TW');
+
+            // ✅ 解析 autoTime 参数并填入排盘时间字段
+            const params = new URLSearchParams(window.location.search);
+            const autoTimeParam = params.get('autoTime');
+            const qimenInput = document.getElementById('qimen_datetime');
+
+            if (autoTimeParam && qimenInput) {
+                const autoDate = new Date(autoTimeParam);
+                qimenInput.value = toLocalDatetimeInputString(autoDate);
+
+                const hint = document.createElement('div');
+                hint.className = 'time-hint';
+                let timeLabel;
+                if (currentLang === 'en') {
+                    timeLabel = `Auto-selected next hour: ${autoDate.toLocaleString('en-US', { hour12: false })}`;
+                } else if (currentLang === 'zh-CN') {
+                    timeLabel = `已为你自动选用下一个时辰：${autoDate.toLocaleString('zh-CN', { hour12: false })}`;
+                } else {
+                    timeLabel = `已為你自動選用下一个時辰：${autoDate.toLocaleString('zh-TW', { hour12: false })}`;
+                }
+                hint.textContent = timeLabel;
+                qimenInput.parentNode.appendChild(hint);
+            }
+
+            // ✅ 再问一个问题按钮功能
+            const askAgainBtn = document.getElementById('askAgainBtn');
+            if (askAgainBtn) {
+                askAgainBtn.addEventListener('click', () => {
+                    const now = new Date();
+                    let hourBlock = now.getHours() + 2 - (now.getHours() % 2);
+                    if (hourBlock >= 24) {
+                        hourBlock -= 24;
+                        now.setDate(now.getDate() + 1);
+                    }
+                    now.setHours(hourBlock, 0, 0, 0);
+                    const nextTimeISO = now.toISOString();
+                    window.location.href = window.location.pathname + '?autoTime=' + encodeURIComponent(nextTimeISO);
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
