@@ -753,10 +753,13 @@
 
                 try {
                     const formData = new FormData(infoForm);
-                    const response = await fetch('/calculate', {
-                        method: 'POST',
-                        body: formData
+                    const API_BASE = "https://qimenaskios.onrender.com";
+
+                    const response = await fetch(`${API_BASE}/calculate`, {
+                    method: 'POST',
+                    body: formData
                     });
+
 
                     if (!response.ok) {
                         throw new Error(await response.text());
