@@ -909,27 +909,32 @@
             }
 
             // ✅ 再问一个问题按钮功能
-            askAgainBtn.addEventListener('click', () => {
-                const now = new Date();
-                const hour = now.getHours();
-                const shifts = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
+            const askAgainBtn = document.getElementById('askAgainBtn');
+            if (askAgainBtn) {
+                askAgainBtn.addEventListener('click', () => {
+                    const now = new Date();
+                    const hour = now.getHours();
 
-                // 找下一个传统奇门时辰起点
-                let nextHour = shifts.find(h => h > hour);
-                const next = new Date(now);
+                    // 十二时辰起点（以北京时间为准）
+                    const shifts = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23];
 
-                if (nextHour === undefined) {
-                    // 已过最后时辰（23:00），跳到次日 01:00
-                    next.setDate(next.getDate() + 1);
-                    nextHour = 1;
-                }
+                    // 找出大于当前小时的第一个起点时辰
+                    let nextHour = shifts.find(h => h > hour);
+                    const next = new Date(now);
 
-                next.setHours(nextHour, 0, 0, 0);
-                const nextTimeISO = next.toISOString();
+                    if (nextHour === undefined) {
+                        // 当前是23点后，下一时辰是次日 01:00
+                        next.setDate(next.getDate() + 1);
+                        nextHour = 1;
+                    }
 
-                // ✅ 跳转回首页并传入 autoTime
-                window.location.href = window.location.pathname + '?autoTime=' + encodeURIComponent(nextTimeISO);
-            });
+                    next.setHours(nextHour, 0, 0, 0);
+                    const nextTimeISO = next.toISOString();
+
+                    // ✅ 页面跳回首页，并带入新时辰参数
+                    window.location.href = window.location.pathname + '?autoTime=' + encodeURIComponent(nextTimeISO);
+                });
+            }
         });
     </script>
 </body>
