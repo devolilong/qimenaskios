@@ -127,6 +127,8 @@
             line-height: 1.6;
             font-size: 1.1rem;
             color: #444;
+            max-height: 500px;       /* ✅ 加这行 */
+            overflow-y: auto;        /* ✅ 加这行 */
         }
         .card {
             margin-bottom: 20px;
@@ -786,8 +788,7 @@
                     questionDisplay.style.display = 'block';
 
                     // 显示解读
-                    document.getElementById('aiInterpretation').textContent = result.interpretation || 
-                        (currentLang === 'en' ? 'No interpretation available.' : '暂无解读内容。');
+                    document.getElementById('aiInterpretation').innerHTML = (result.interpretation || '暂无解读内容。').replace(/\n/g, '<br>');
 
                     // 显示基本信息
                     const basicInfo = result.basic_info;
