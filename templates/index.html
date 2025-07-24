@@ -50,18 +50,23 @@
             font-style: italic;
             margin-left: 6px;
         }
-        .input-box, .form-select {
+        .input-box,
+        .form-select {
             display: block;
             width: 100%;
+            max-width: 500px;               /* ✅ 限制最大宽度，防止iPad上过宽 */
             font-size: 1.1rem;
             padding: 12px 14px;
             border: 1.5px solid #222;
             border-radius: 12px;
             background: #fff;
-            box-sizing: border-box;
+            box-sizing: border-box;         /* ✅ padding不撑大外部宽度 */
             outline: none;
             transition: border 0.2s;
             font-family: 'HarmonyOS Sans', 'Noto Sans SC', 'Noto Sans TC', 'Microsoft YaHei', '微软雅黑', 'Arial', sans-serif;
+            -webkit-appearance: none;       /* ✅ iOS设备清除系统样式差异 */
+            appearance: none;
+            margin: 0 auto;                 /* ✅ 在大屏上居中展示 */
         }
         .input-box:focus, .form-select:focus {
             border: 1.5px solid #555;
@@ -474,7 +479,7 @@
                     </div>
                 </div>
 
-                <button class="back-btn" id="backBtn" data-i18n="back">返回</button>
+<!--                 <button class="back-btn" id="backBtn" data-i18n="back">返回</button> -->
 
                 <!-- ✅ 再问一个问题按钮（自动跳转首页 + 自动填时间） -->
                 <button class="back-btn" id="askAgainBtn" style="margin-left: 12px;" data-i18n="ask_again">
@@ -831,25 +836,25 @@
             };
 
             // 返回按钮点击事件
-            backBtn.onclick = function() {
-                document.getElementById('langBtn').style.display = 'block'; // ✅ 重新显示语言按钮
-                resultContainer.style.display = 'none';
-                pageInput.style.display = 'block';
-                pageInput.scrollIntoView({ behavior: 'smooth' });
+            // backBtn.onclick = function() {
+            //     document.getElementById('langBtn').style.display = 'block'; // ✅ 重新显示语言按钮
+            //     resultContainer.style.display = 'none';
+            //     pageInput.style.display = 'block';
+            //     pageInput.scrollIntoView({ behavior: 'smooth' });
             
-                // ✅ 隐藏进度条弹出框
-                hideProgress();
+            //     // ✅ 隐藏进度条弹出框
+            //     hideProgress();
             
-                // ✅ 重置进度条状态
-                progressFill.style.width = '0%';
-                progressLabels.forEach(label => label.classList.remove('active'));
-                progressStatus.textContent = '';
+            //     // ✅ 重置进度条状态
+            //     progressFill.style.width = '0%';
+            //     progressLabels.forEach(label => label.classList.remove('active'));
+            //     progressStatus.textContent = '';
             
-                // ✅ 清空结果显示内容（可选）
-                document.getElementById('aiInterpretation').textContent = '';
-                document.getElementById('basicInfoContent').innerHTML = '';
-                document.getElementById('questionDisplay').style.display = 'none';
-            };
+            //     // ✅ 清空结果显示内容（可选）
+            //     document.getElementById('aiInterpretation').textContent = '';
+            //     document.getElementById('basicInfoContent').innerHTML = '';
+            //     document.getElementById('questionDisplay').style.display = 'none';
+            // };
 
             // 设置默认时间
             const now = new Date();
