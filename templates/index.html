@@ -766,15 +766,23 @@
                 // 开始进度条动画
                 animateProgress();
 
-                try {
+                  try {
                     const formData = new FormData(infoForm);
-                    const API_BASE = "https://qimenaskios.onrender.com";
-                    // const API_BASE = "http://localhost:5001";
-
-                    const response = await fetch(`${API_BASE}/calculate`, {
-                    method: 'POST',
-                    body: formData
+                    // ✅ 改成同源
+                    // const API_BASE = window.location.origin;
+                    // const response = await fetch(`${API_BASE}/calculate`, { ... });
+                
+                    // ✅ 更简单：直接相对路径（推荐）
+                    const response = await fetch('/calculate', {
+                      method: 'POST',
+                      body: formData,
                     });
+                
+                    const data = await response.json();
+                    // ...你的后续处理
+                  } catch (err) {
+                    console.error('request failed', err);
+                  }
 
 
                     if (!response.ok) {
