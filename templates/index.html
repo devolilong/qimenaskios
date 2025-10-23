@@ -750,108 +750,99 @@
                 }, 300); // 等待动画完成
             }
 
-            infoForm.onsubmit = async function(e) {
-                e.preventDefault();
-                if (!infoForm.checkValidity()) {
-                    infoForm.reportValidity();
-                    return;
-                }
-
-                submitBtn.disabled = true;
-                submitBtn.textContent = currentLang === 'en' ? 'Processing...' : '处理中...';
-                
-                // 显示进度条弹出框
-                showProgress();
-                
-                // 开始进度条动画
-                animateProgress();
-
-                  try {
-                    const formData = new FormData(infoForm);
-                    // ✅ 改成同源
-                    // const API_BASE = window.location.origin;
-                    // const response = await fetch(`${API_BASE}/calculate`, { ... });
-                
-                    // ✅ 更简单：直接相对路径（推荐）
-                    const response = await fetch('/calculate', {
-                      method: 'POST',
-                      body: formData,
-                    });
-                
-                    const data = await response.json();
-                    // ...你的后续处理
-                  } catch (err) {
-                    console.error('request failed', err);
+          infoForm.onsubmit = async function(e) {
+            e.preventDefault();
+            if (!infoForm.checkValidity()) {
+              infoForm.reportValidity();
+              return;
+            }
+        
+            submitBtn.disabled = true;
+            submitBtn.textContent = currentLang === 'en' ? 'Processing...' : '处理中...';
+        
+            // 显示进度条弹窗并启动动画
+            showProgress();
+            current = 0; // 重置进度
+            animateProgress();
+        
+            try {
+              const formData = new FormData(infoForm);
+        
+              // ✅ 同源请求（关键改动）：不要再写 onrender 域名
+              const response = await fetch('/calculate', {
+                method: 'POST',
+                body: formData,
+              });
+        
+              if (!response.ok) {
+                // 把后端错误信息抛出来
+                throw new Error(await response.text());
+              }
+        
+              const result = await response.json();
+        
+              // —— 展示结果 —— //
+              // 显示问题
+              const questionDisplay = document.getElementById('questionDisplay');
+              questionDisplay.textContent = formData.get('question');
+              questionDisplay.style.display = 'block';
+        
+              // 显示解读
+              document.getElementById('aiInterpretation').innerHTML =
+                (result.interpretation || '暂无解读内容。').replace(/\n/g, '<br>');
+        
+              // 显示基本信息
+              const basicInfo = result.basic_info;
+              let basicInfoHtml = '';
+              if (basicInfo && typeof basicInfo === 'object') {
+                for (const key in basicInfo) {
+                  const value = basicInfo[key];
+                  if (value && typeof value === 'object') {
+                    basicInfoHtml += `<strong>${key}：</strong><br>`;
+                    for (const subKey in value) {
+                      basicInfoHtml += `&nbsp;&nbsp;&nbsp;&nbsp;${subKey}：${value[subKey]}<br>`;
+                    }
+                  } else {
+                    basicInfoHtml += `<strong>${key}：</strong>${value ?? '—'}<br>`;
                   }
-
-
-                    if (!response.ok) {
-                        throw new Error(await response.text());
-                    }
-
-                    const result = await response.json();
-                    
-                    // 显示问题
-                    const questionDisplay = document.getElementById('questionDisplay');
-                    questionDisplay.textContent = formData.get('question');
-                    questionDisplay.style.display = 'block';
-
-                    // 显示解读
-                    document.getElementById('aiInterpretation').innerHTML = (result.interpretation || '暂无解读内容。').replace(/\n/g, '<br>');
-
-                    // 显示基本信息
-                    const basicInfo = result.basic_info;
-                    let basicInfoHtml = '';
-                    if (basicInfo && typeof basicInfo === 'object') {
-                        for (const key in basicInfo) {
-                            const value = basicInfo[key];
-                            if (value && typeof value === 'object') {
-                                basicInfoHtml += `<strong>${key}：</strong><br>`;
-                                for (const subKey in value) {
-                                    basicInfoHtml += `&nbsp;&nbsp;&nbsp;&nbsp;${subKey}：${value[subKey]}<br>`;
-                                }
-                            } else {
-                                basicInfoHtml += `<strong>${key}：</strong>${value ?? '—'}<br>`;
-                            }
-                        }
-                    } else {
-                        basicInfoHtml = currentLang === 'en' ? 
-                            '<em>No basic information available</em>' : 
-                            '<em>无可用基本信息</em>';
-                    }
-                    document.getElementById('basicInfoContent').innerHTML = basicInfoHtml;
-
-                    // 显示排盘图
-                    const palaceData = result.palace_data;
-                    if (palaceData) {
-                        for (const gong in palaceData) {
-                            const el = document.getElementById(`gong-${gong}`);
-                            const data = palaceData[gong];
-                            if (el && data) {
-                                el.innerHTML = ["神", "門", "星", "天盤", "地盤"]
-                                    .map(key => data[key] ? `${key}：${data[key]}` : '')
-                                    .filter(Boolean)
-                                    .join("<br>");
-                            }
-                        }
-                    }
-
-                    // 显示结果页面
-                    pageInput.style.display = 'none';
-                    resultContainer.style.display = 'block';
-                    document.getElementById('langBtn').style.display = 'none'; // 隐藏语言按钮
-                    resultContainer.scrollIntoView({ behavior: 'smooth' });
-
-                } catch (error) {
-                    alert(currentLang === 'en' ? 
-                        'Error: ' + error.message : 
-                        '错误：' + error.message);
-                    hideProgress();
-                } finally {
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = i18n[currentLang]['submit_button'];
                 }
-            };
+              } else {
+                basicInfoHtml = currentLang === 'en'
+                  ? '<em>No basic information available</em>'
+                  : '<em>无可用基本信息</em>';
+              }
+              document.getElementById('basicInfoContent').innerHTML = basicInfoHtml;
+        
+              // 显示排盘图
+              const palaceData = result.palace_data;
+              if (palaceData) {
+                for (const gong in palaceData) {
+                  const el = document.getElementById(`gong-${gong}`);
+                  const data = palaceData[gong];
+                  if (el && data) {
+                    el.innerHTML = ["神", "門", "星", "天盤", "地盤"]
+                      .map(key => data[key] ? `${key}：${data[key]}` : '')
+                      .filter(Boolean)
+                      .join("<br>");
+                  }
+                }
+              }
+        
+              // 切到结果页
+              pageInput.style.display = 'none';
+              resultContainer.style.display = 'block';
+              document.getElementById('langBtn').style.display = 'none';
+              resultContainer.scrollIntoView({ behavior: 'smooth' });
+        
+            } catch (error) {
+              console.error('request failed:', error);
+              alert((currentLang === 'en' ? 'Error: ' : '错误：') + (error?.message || error));
+            } finally {
+              hideProgress();
+              submitBtn.disabled = false;
+              submitBtn.textContent = i18n[currentLang]['submit_button'];
+            }
+          };
 
             // 返回按钮点击事件
             // backBtn.onclick = function() {
