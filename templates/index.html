@@ -3,7 +3,7 @@
 <head>
     <!-- 必备设置 -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="奇門解盤">
 
@@ -548,7 +548,7 @@
                 'complete': '解盤完成！',
                 'progress_title': '奇門解盤進行中',
                 'ask_again': '再問一個問題（自動換時辰）', // 繁體
-                'disclaimer_text': '⚠️ AI解讀奇門遁甲僅供娛樂參考,請勿過度解讀。\n解盤過程需約1分鐘，請耐心等待...'
+                'disclaimer_text': '⚠️ AI解讀奇門遁甲僅供娛樂參考,請勿過度解讀。\n解盤過程需約1分鐘，請耐心等待...',
                 'footer_about_title': '關於 QimenAsk',
                 'footer_about_p1': 'QimenAsk 是一個以中國傳統哲學為靈感的文化性網站，提供以學習與自我反思的方式探索《易經》與奇門遁甲等古老體系。',
                 'footer_about_p2': '我們將奇門遁甲理解為一套關於時間、空間與自然元素互動的分析框架，協助使用者做出更審慎的思考與判斷。',
@@ -599,7 +599,7 @@
                 'complete': 'Divination Complete!',
                 'progress_title': 'Qi Men Divination in Progress',
                 'ask_again': 'Ask another question (auto next hour)', // English
-                'disclaimer_text': '⚠️ AI-based Qi Men Dun Jia interpretation is for entertainment only.\nPlease do not take it too seriously. The process takes about 1 minute. Please wait patiently...'
+                'disclaimer_text': '⚠️ AI-based Qi Men Dun Jia interpretation is for entertainment only.\nPlease do not take it too seriously. The process takes about 1 minute. Please wait patiently...',
                 'footer_about_title': 'About QimenAsk',
                 'footer_about_p1': 'QimenAsk is a cultural web project inspired by traditional Chinese philosophy, offering an educational and self-reflective way to explore the I Ching and Qimen Dunjia.',
                 'footer_about_p2': 'We present Qimen Dunjia as a framework that studies interactions of time, space, and natural elements to support thoughtful understanding and decision-making.',
@@ -650,7 +650,7 @@
                 'complete': '解盘完成！',
                 'progress_title': '奇门解盘进行中',
                 'ask_again': '再问一个问题（自动换时辰）', // 简体
-                'disclaimer_text': '⚠️ AI解盘仅供娱乐参考,请勿过度解读。\n解盘过程需约1分钟,请耐心等待...'
+                'disclaimer_text': '⚠️ AI解盘仅供娱乐参考,请勿过度解读。\n解盘过程需约1分钟,请耐心等待...',
                 'footer_about_title': '关于 QimenAsk',
                 'footer_about_p1': 'QimenAsk 是一个以中国传统哲学为灵感的文化性网站，提供以学习与自我反思的方式探索《易经》和奇门遁甲等古老体系。',
                 'footer_about_p2': '我们将奇门遁甲理解为一套研究时间、空间与自然元素互动的分析框架，帮助用户进行理性思考与判断。',
@@ -797,14 +797,12 @@
             try {
               const formData = new FormData(infoForm);
         
-              // ✅ 同源请求（关键改动）：不要再写 onrender 域名
               const response = await fetch('/calculate', {
                 method: 'POST',
                 body: formData,
               });
         
               if (!response.ok) {
-                // 把后端错误信息抛出来
                 throw new Error(await response.text());
               }
         
