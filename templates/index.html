@@ -549,6 +549,14 @@
                 'progress_title': '奇門解盤進行中',
                 'ask_again': '再問一個問題（自動換時辰）', // 繁體
                 'disclaimer_text': '⚠️ AI解讀奇門遁甲僅供娛樂參考,請勿過度解讀。\n解盤過程需約1分鐘，請耐心等待...'
+                'footer_about_title': '關於 QimenAsk',
+                'footer_about_p1': 'QimenAsk 是一個以中國傳統哲學為靈感的文化性網站，提供以學習與自我反思的方式探索《易經》與奇門遁甲等古老體系。',
+                'footer_about_p2': '我們將奇門遁甲理解為一套關於時間、空間與自然元素互動的分析框架，協助使用者做出更審慎的思考與判斷。',
+                'footer_privacy_title': '隱私政策',
+                'footer_privacy_p1': '本網站使用 Google AdSense 展示廣告，可能使用 cookies 進行統計與個人化；我們不收集功能所需之外的個人資訊。來自歐盟/英國的使用者將看到符合法規的同意訊息。',
+                'footer_contact_title': '聯絡方式',
+                'footer_contact_email_label': '電子郵件：help@qimenask.com',
+                'footer_disclaimer': '本網站內容僅用於文化與學習目的，不構成命理、醫療、法律與投資建議。'
             },
             'en': {
                 'page_title': 'Qi Men Divination',
@@ -592,6 +600,14 @@
                 'progress_title': 'Qi Men Divination in Progress',
                 'ask_again': 'Ask another question (auto next hour)', // English
                 'disclaimer_text': '⚠️ AI-based Qi Men Dun Jia interpretation is for entertainment only.\nPlease do not take it too seriously. The process takes about 1 minute. Please wait patiently...'
+                'footer_about_title': 'About QimenAsk',
+                'footer_about_p1': 'QimenAsk is a cultural web project inspired by traditional Chinese philosophy, offering an educational and self-reflective way to explore the I Ching and Qimen Dunjia.',
+                'footer_about_p2': 'We present Qimen Dunjia as a framework that studies interactions of time, space, and natural elements to support thoughtful understanding and decision-making.',
+                'footer_privacy_title': 'Privacy Policy',
+                'footer_privacy_p1': 'This site uses Google AdSense and may use cookies for analytics and personalization. We do not collect personally identifiable information beyond what is necessary for functionality. Users in the EU/UK will see a compliant consent message.',
+                'footer_contact_title': 'Contact',
+                'footer_contact_email_label': 'Email: help@qimenask.com',
+                'footer_disclaimer': 'For cultural and educational purposes only; not professional advice in fortune-telling, medical, legal, or financial domains.'
             },
             'zh-CN': {
                 'page_title': '奇门解盘',
@@ -635,6 +651,15 @@
                 'progress_title': '奇门解盘进行中',
                 'ask_again': '再问一个问题（自动换时辰）', // 简体
                 'disclaimer_text': '⚠️ AI解盘仅供娱乐参考,请勿过度解读。\n解盘过程需约1分钟,请耐心等待...'
+                'footer_about_title': '关于 QimenAsk',
+                'footer_about_p1': 'QimenAsk 是一个以中国传统哲学为灵感的文化性网站，提供以学习与自我反思的方式探索《易经》和奇门遁甲等古老体系。',
+                'footer_about_p2': '我们将奇门遁甲理解为一套研究时间、空间与自然元素互动的分析框架，帮助用户进行理性思考与判断。',
+                'footer_privacy_title': '隐私政策',
+                'footer_privacy_p1': '本网站使用 Google AdSense 展示广告，可能使用 cookies 进行统计与个性化；我们不收集功能所需之外的个人信息。来自欧盟/英国的用户将看到符合法规的同意提示。',
+                'footer_contact_title': '联系方式',
+                'footer_contact_email_label': '邮箱：help@qimenask.com',
+                'footer_disclaimer': '本站内容仅用于文化与学习目的，不构成命理、医疗、法律与投资建议。'
+                
             }
         };
 
@@ -944,5 +969,25 @@
         }
         });
     </script>
+      <!-- ✅ Footer（多语言，随浏览器和右上角语言选项联动） -->
+  <footer style="background:#f8f8f8; padding:20px; margin-top:40px; font-size:14px; color:#555;">
+    <h3 data-i18n="footer_about_title"></h3>
+    <p data-i18n="footer_about_p1"></p>
+    <p data-i18n="footer_about_p2"></p>
+
+    <h3 data-i18n="footer_privacy_title"></h3>
+    <p data-i18n="footer_privacy_p1"></p>
+
+    <h3 data-i18n="footer_contact_title"></h3>
+    <p>
+      <span data-i18n="footer_contact_email_label"></span>
+      <a href="mailto:contact@qimenask.com">contact@qimenask.com</a>
+    </p>
+
+    <p style="font-size:12px;color:#999;margin-top:10px;">
+      <span>© <span id="yearNow"></span> QimenAsk.com · </span>
+      <span data-i18n="footer_disclaimer"></span>
+    </p>
+  </footer>
 </body>
 </html> 
