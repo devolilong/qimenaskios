@@ -272,8 +272,7 @@ def calculate():
         }
 
         # 调用DeepSeek API进行解读
-        #client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"),base_url="https://api.deepseek.com")
-        client = OpenAI(api_key="sk-78a1145dffd84d2f8731c5abb7133060", base_url="https://api.deepseek.com")
+        client = OpenAI(api_key=os.getenv("DEEPSEEK_API_KEY"),base_url="https://api.deepseek.com")
 
 
         # 解析用户的出生信息
@@ -531,3 +530,4 @@ def calculate():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
+
