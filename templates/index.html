@@ -1715,14 +1715,6 @@
                 const langInput = document.getElementById('langInput');
                 if (langInput) langInput.value = lang;
 
-                // 底部长说明多语言切换
-                const descTW = document.getElementById('desc-zhTW');
-                const descCN = document.getElementById('desc-zhCN');
-                const descEN = document.getElementById('desc-en');
-                if (descTW) descTW.style.display = (lang === 'zh-TW') ? 'block' : 'none';
-                if (descCN) descCN.style.display = (lang === 'zh-CN') ? 'block' : 'none';
-                if (descEN) descEN.style.display = (lang === 'en') ? 'block' : 'none';
-
                 // data-i18n
                 document.querySelectorAll('[data-i18n]').forEach(element => {
                     const key = element.getAttribute('data-i18n');
