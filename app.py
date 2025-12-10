@@ -63,6 +63,14 @@ def index():
         'type': 'shijia'    # 默认时家
     }
     return render_template('index.html', data=default_data)
+    
+@app.route('/privacy.html')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms.html')
+def terms():
+    return render_template('terms.html')
 
 @app.route('/calculate', methods=['POST', 'OPTIONS'])
 def calculate():
@@ -71,14 +79,6 @@ def calculate():
 
     print("🚀 收到请求了")           # 确认请求到达
     print(request.form)             # 打印表单中的所有字段
-
-@app.route('/privacy.html')
-def privacy():
-    return render_template('privacy.html')
-
-@app.route('/terms.html')
-def terms():
-    return render_template('terms.html')
 
     try:
         data = request.form
@@ -539,6 +539,7 @@ def terms():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
+
 
 
 
