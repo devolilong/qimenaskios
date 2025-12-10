@@ -37,7 +37,8 @@ ALLOWED_ORIGIN_RE = re.compile(
     r"^(capacitor://localhost"
     r"|http://localhost(?::\d+)?"
     r"|http://127\.0\.0\.1(?::\d+)?"
-    r"|https://qimenaskios\.onrender\.com"   # 线上域名
+    r"|https://qimenask\.com"       
+    r"|https://www\.qimenask\.com" 
     r")$"
 )
 
@@ -530,4 +531,5 @@ def calculate():
 
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
+
 
