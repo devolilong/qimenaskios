@@ -149,7 +149,14 @@
             line-height: 1.6;
         }
 
-        /* ====== 你原来的首页样式（基本保持不动） ====== */
+        .qa-section {
+            padding-top: 8px;      /* 给 section 自己一点 padding，防止 margin 折叠 */
+        }
+        
+        .qa-section h1:first-child {
+            margin-top: 0;
+        }
+
         .main-container {
             max-width: 800px;
             margin: 40px auto 0 auto;
