@@ -525,6 +525,11 @@
                 padding: 16px;
                 width: 100%;
             }
+            .lang-select-pop{
+                top: 56px; /* 48px topbar + 一点间距 */
+                right: 14px;
+            }
+            
         }
     
     </style>
@@ -542,6 +547,12 @@
                 <span id="langBtnLabel">繁</span>
             </button>
         </div>
+    </div>
+
+    <div class="lang-select-pop" id="langPop" role="menu" aria-label="語言選擇">
+        <button class="lang-option selected" data-lang="zh-TW" role="menuitem">繁體中文</button>
+        <button class="lang-option" data-lang="en" role="menuitem">English</button>
+        <button class="lang-option" data-lang="zh-CN" role="menuitem">简体中文</button>
     </div>
 
     <div class="qa-layout">
@@ -606,12 +617,6 @@
         <button class="lang-btn lang-btn-desktop" id="langBtnDesktop" data-lang-trigger="true" title="切換語言" aria-label="切換語言">
             <span class="lang-current-label">繁</span>
         </button>
-
-        <div class="lang-select-pop" id="langPop" role="menu" aria-label="語言選擇">
-            <button class="lang-option selected" data-lang="zh-TW" role="menuitem">繁體中文</button>
-            <button class="lang-option" data-lang="en" role="menuitem">English</button>
-            <button class="lang-option" data-lang="zh-CN" role="menuitem">简体中文</button>
-        </div>
 
                     <!-- 页面一：输入信息 -->
                     <div id="page-input">
@@ -1917,8 +1922,10 @@
             if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
                 element.placeholder = i18n[lang][key];
             } else {
+                // ✅ 如果元素里面还有子节点（比如 label 里有 span hint），不要覆盖整个 textContent
+                if (element.children && element.children.length > 0) return;
                 element.textContent = i18n[lang][key];
-            }
+                }
             }
         });
 
@@ -2075,8 +2082,8 @@
                         if (pageInput && resultContainer) {
                             pageInput.style.display = 'none';
                             resultContainer.style.display = 'block';
-                            const langBtn = document.getElementById('langBtn');
-                            if (langBtn) langBtn.style.display = 'none';
+                            //const langBtn = document.getElementById('langBtn');
+                            //if (langBtn) langBtn.style.display = 'none';
                             resultContainer.scrollIntoView({ behavior: 'smooth' });
                         }
 
